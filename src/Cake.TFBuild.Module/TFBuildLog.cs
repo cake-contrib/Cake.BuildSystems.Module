@@ -9,18 +9,15 @@ namespace Cake.TFBuild.Module
 {
     public class TFBuildLog : ICakeLog
     {
-        public TFBuildLog(IConsole console, ICakeContext context, Verbosity verbosity = Verbosity.Normal)
+        public TFBuildLog(IConsole console, Verbosity verbosity = Verbosity.Normal)
         {
             _cakeLogImplementation = new CakeBuildLog(console, verbosity);
-            _context = context;
         }
         private readonly ICakeLog _cakeLogImplementation;
-        private readonly ICakeContext _context;
 
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
-            var b = _context.BuildSystem();
-            if (b.IsRunningOnVSTS || b.IsRunningOnTFS)
+            if (!string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("TF_BUILD")))
             {
                 switch (level)
                 {
