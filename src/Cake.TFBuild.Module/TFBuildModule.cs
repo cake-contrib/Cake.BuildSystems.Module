@@ -1,10 +1,12 @@
 // A Hello World! program in C#.
-using System;
+
+using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Composition;
-using Cake.Core.Diagnostics;
 
-namespace Cake.TFBuildModule
+[assembly: CakeModule(typeof(Cake.TFBuild.Module.TFBuildEngineModule))]
+
+namespace Cake.TFBuild.Module
 {
     class TFBuildEngineModule : ICakeModule
     {
