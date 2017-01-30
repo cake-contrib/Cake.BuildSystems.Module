@@ -44,6 +44,19 @@ namespace Cake.TFBuild.Module
 
         private void WriteToMarkdown(CakeReport report)
         {
+            var maxTaskNameLength = 29;
+            foreach (var item in report)
+            {
+                if (item.TaskName.Length > maxTaskNameLength)
+                {
+                    maxTaskNameLength = item.TaskName.Length;
+                }
+            }
+
+            maxTaskNameLength++;
+            string lineFormat = "|{0,-" + maxTaskNameLength + "}|{1}|{2,-20}|";
+
+
             var sb = new StringBuilder();
             sb.AppendLine("");
             sb.AppendLine("|Task|Status|Duration|");
@@ -52,7 +65,7 @@ namespace Cake.TFBuild.Module
             {
                 if (ShouldWriteTask(item))
                 {
-                    sb.AppendLine(string.Format("|{0}|{1}|{2}|", item.TaskName, item.ExecutionStatus, FormatDuration(item)));
+                    sb.AppendLine(string.Format(lineFormat, item.TaskName, item.ExecutionStatus, FormatDuration(item)));
                 }
             }
             sb.AppendLine("");
@@ -63,7 +76,8 @@ namespace Cake.TFBuild.Module
             using (var writer = new StreamWriter(file.OpenWrite())) {
                 writer.Write(sb.ToString());
             }
-            b.Commands.UploadTaskSummary(absFilePath);
+            //b.Commands.UploadTaskSummary(absFilePath);
+            _console.WriteLine($"##vso[task.addattachment type=Distributedtask.Core.Summary;name=Cake Build Summary;]{absFilePath.MakeAbsolute(_context.Environment).FullPath}");
         }
 
         private void WriteToConsole(CakeReport report)
