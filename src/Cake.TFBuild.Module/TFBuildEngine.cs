@@ -79,7 +79,7 @@ namespace Cake.TFBuild.Module
                 b.TFBuild.UpdateProgress(_parentRecord, GetProgress(currentIndex, _engine.Tasks.Count));
                 b.TFBuild.Commands.SetProgress(GetProgress(currentIndex, _engine.Tasks.Count), e.TaskSetupContext.Task.Name);
                 var g = e.TaskSetupContext.TFBuild()
-                    .Commands.CreateNewRecord(currentTask.Name, "build", currentIndex,
+                    .Commands.CreateNewRecord(currentTask.Name, "build", TaskRecords.Count + 1,
                         new TFBuildRecordData() {StartTime = DateTime.Now, ParentRecord = _parentRecord, Progress = 0});
                 TaskRecords.Add(currentTask.Name, g);
             }
