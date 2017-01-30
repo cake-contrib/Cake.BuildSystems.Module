@@ -15,6 +15,7 @@ namespace Cake.TFBuild.Module
         {
             registrar.RegisterType<TFBuildEngine>().As<ICakeEngine>().Singleton();
             registrar.RegisterType<TFBuildLog>().As<ICakeLog>().Singleton();
+            registrar.RegisterType<TFBuildReportPrinter>().As<ICakeReportPrinter>().Singleton();
         }
     }
 }

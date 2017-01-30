@@ -15,9 +15,23 @@ namespace Cake.TFBuild.Module
         private readonly ICakeLog _cakeLogImplementation;
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
-            if (level == LogLevel.Warning)
+            switch (level)
             {
-                _cakeLogImplementation.Write(Verbosity.Quiet, LogLevel.Information, "##vso[task.logissue type=warning;]{0}", string.Format(format, args));
+                case LogLevel.Fatal:
+                case LogLevel.Error:
+                    _cakeLogImplementation.Write(Verbosity.Quiet, LogLevel.Information,
+                        "##vso[task.logissue type=error;]{0}", string.Format(format, args));
+                    break;
+                case LogLevel.Warning:
+                    _cakeLogImplementation.Write(Verbosity.Quiet, LogLevel.Information,
+                        "##vso[task.logissue type=warning;]{0}", string.Format(format, args));
+                    break;
+                case LogLevel.Information:
+                case LogLevel.Verbose:
+                case LogLevel.Debug:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }
             _cakeLogImplementation.Write(verbosity, level, format, args);
         }
