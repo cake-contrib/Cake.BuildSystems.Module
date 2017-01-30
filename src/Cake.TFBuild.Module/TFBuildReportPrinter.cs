@@ -37,8 +37,9 @@ namespace Cake.TFBuild.Module
                 }
                 WriteToConsole(report);
             }
-            catch
+            finally
             {
+                _console.ResetColor();
             }
         }
 
