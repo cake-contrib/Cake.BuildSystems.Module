@@ -54,13 +54,13 @@ namespace Cake.TFBuild.Module
             }
 
             maxTaskNameLength++;
-            string lineFormat = "|{0,-" + maxTaskNameLength + "}|\t|{1,20}|";
+            string lineFormat = "|{0,-" + maxTaskNameLength + "}|{1,20}|";
 
 
             var sb = new StringBuilder();
             sb.AppendLine("");
-            sb.AppendLine("|Task| |Duration|");
-            sb.AppendLine("|:---|-|-------:|");
+            sb.AppendLine("|Task|Duration|");
+            sb.AppendLine("|:---|-------:|");
             foreach (var item in report)
             {
                 if (ShouldWriteTask(item))
