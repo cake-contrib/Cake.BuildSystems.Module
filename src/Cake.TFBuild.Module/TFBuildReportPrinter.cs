@@ -54,18 +54,18 @@ namespace Cake.TFBuild.Module
             }
 
             maxTaskNameLength++;
-            string lineFormat = "|{0,-" + maxTaskNameLength + "}|{1}|{2,-20}|";
+            string lineFormat = "|{0,-" + maxTaskNameLength + "}|{1,20}|";
 
 
             var sb = new StringBuilder();
             sb.AppendLine("");
-            sb.AppendLine("|Task|Status|Duration|");
-            sb.AppendLine("|:--:|:----:|:------:|");
+            sb.AppendLine("|Task|Duration|");
+            sb.AppendLine("|:--:|:------:|");
             foreach (var item in report)
             {
                 if (ShouldWriteTask(item))
                 {
-                    sb.AppendLine(string.Format(lineFormat, item.TaskName, item.ExecutionStatus, FormatDuration(item)));
+                    sb.AppendLine(string.Format(lineFormat, item.TaskName, FormatDuration(item)));
                 }
             }
             sb.AppendLine("");
