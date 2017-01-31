@@ -7,10 +7,11 @@ using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Diagnostics.Formatting;
+using Cake.Diagnostics;
 
-namespace Cake.Diagnostics
+namespace Cake.Module.Shared
 {
-    internal sealed class CakeBuildLog : ICakeLog
+    public sealed class CakeBuildLog : ICakeLog
     {
         private readonly IConsole _console;
         private readonly object _lock;

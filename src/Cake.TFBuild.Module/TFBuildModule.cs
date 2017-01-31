@@ -1,5 +1,3 @@
-// A Hello World! program in C#.
-
 using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Composition;
@@ -13,9 +11,12 @@ namespace Cake.TFBuild.Module
     {
         public void Register(ICakeContainerRegistrar registrar)
         {
-            registrar.RegisterType<TFBuildEngine>().As<ICakeEngine>().Singleton();
-            registrar.RegisterType<TFBuildLog>().As<ICakeLog>().Singleton();
-            registrar.RegisterType<TFBuildReportPrinter>().As<ICakeReportPrinter>().Singleton();
+            if (!string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("TF_BUILD")))
+            {
+                registrar.RegisterType<TFBuildEngine>().As<ICakeEngine>().Singleton();
+                registrar.RegisterType<TFBuildLog>().As<ICakeLog>().Singleton();
+                registrar.RegisterType<TFBuildReportPrinter>().As<ICakeReportPrinter>().Singleton();
+            }
         }
     }
 }

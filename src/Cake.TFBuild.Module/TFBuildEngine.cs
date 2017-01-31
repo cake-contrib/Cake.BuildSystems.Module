@@ -5,21 +5,21 @@ using Cake.Common.Build;
 using Cake.Common.Build.TFBuild.Data;
 using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Module.Shared;
 
 namespace Cake.TFBuild.Module
 {
     /// <summary>
     /// Represents a Cake engine for use with the TF Build engine.
     /// </summary>
-    public partial class TFBuildEngine : ICakeEngine
+    public sealed class TFBuildEngine : CakeEngineBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TFBuildEngine"/> type.
         /// </summary>
         /// <param name="log">The log.</param>
-        public TFBuildEngine(ICakeLog log)
+        public TFBuildEngine(ICakeLog log) : base(new CakeEngine(log))
         {
-            _engine = new CakeEngine(log);
             _engine.Setup += BuildSetup;
             _engine.TaskSetup += OnTaskSetup;
             _engine.TaskTeardown += OnTaskTeardown;
@@ -102,7 +102,6 @@ namespace Cake.TFBuild.Module
             }
         }
 
-        private readonly ICakeEngine _engine;
         private Guid _parentRecord;
         private Dictionary<string, Guid> TaskRecords { get; } = new Dictionary<string, Guid>();
     }

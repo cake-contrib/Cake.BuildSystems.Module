@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Reflection;
-using Cake.Common.Build;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Module.Shared;
 
-namespace Cake.TFBuild.Module
+namespace Cake.TeamCity.Module
 {
-    public class TFBuildLog : ICakeLog
+    public class TeamCityLog : ICakeLog
     {
-        public TFBuildLog(IConsole console, Verbosity verbosity = Verbosity.Normal)
+        public TeamCityLog(IConsole console, Verbosity verbosity = Verbosity.Normal)
         {
             _cakeLogImplementation = new CakeBuildLog(console, verbosity);
         }
@@ -24,11 +22,11 @@ namespace Cake.TFBuild.Module
                     case LogLevel.Fatal:
                     case LogLevel.Error:
                         _cakeLogImplementation.Write(Verbosity.Quiet, LogLevel.Information,
-                            "##vso[task.logissue type=error;]{0}", string.Format(format, args));
+                            "##teamcity[buildProblem description='{0}']", string.Format(format, args));
                         break;
                     case LogLevel.Warning:
                         _cakeLogImplementation.Write(Verbosity.Quiet, LogLevel.Information,
-                            "##vso[task.logissue type=warning;]{0}", string.Format(format, args));
+                            "##teamcity[message text='{0}' status='WARNING']", string.Format(format, args));
                         break;
                     case LogLevel.Information:
                     case LogLevel.Verbose:
