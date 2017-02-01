@@ -47,8 +47,12 @@ namespace Cake.TeamCity.Module
             {
                 var tc = b.TeamCity;
                 tc.WriteStartBlock(e.TaskSetupContext.Task.Name);
-                tc.WriteStartProgress(
-                    $"Running {e.TaskSetupContext.Task.Name} {(string.IsNullOrWhiteSpace(e.TaskSetupContext.Task.Description) ? string.Empty : ": " + e.TaskSetupContext.Task.Description)}");
+                tc.WriteStartProgress($"Running task {e.TaskSetupContext.Task.Name}");
+                if (!string.IsNullOrWhiteSpace(e.TaskSetupContext.Task.Description))
+                {
+                    tc.WriteStartProgress(e.TaskSetupContext.Task.Description);
+                }
+
             }
         }
 

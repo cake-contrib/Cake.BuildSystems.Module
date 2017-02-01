@@ -15,7 +15,7 @@ namespace Cake.TeamCity.Module
             if (!string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("TEAMCITY_VERSION")))
             {
                 registrar.RegisterType<TeamCityEngine>().As<ICakeEngine>().Singleton();
-                //registrar.RegisterType<TeamCityLog>().As<ICakeLog>().Singleton();
+                registrar.RegisterType<TeamCityLog>().As<ICakeLog>().Singleton();
                 //registrar.RegisterType<TFBuildReportPrinter>().As<ICakeReportPrinter>().Singleton();
             }
         }

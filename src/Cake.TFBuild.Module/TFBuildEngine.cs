@@ -36,7 +36,7 @@ namespace Cake.TFBuild.Module
                     FinishTime = DateTime.Now,
                     Status = TFBuildTaskStatus.Completed,
                     Result = e.TeardownContext.Successful ? TFBuildTaskResult.Succeeded : TFBuildTaskResult.Failed,
-                    Progress = TaskRecords.Count/_engine.Tasks.Count*100,
+                    Progress = GetProgress(TaskRecords.Count, _engine.Tasks.Count),
                 });
             }
         }
@@ -77,7 +77,8 @@ namespace Cake.TFBuild.Module
                     _engine.Tasks.First(t => t.Name == e.TaskSetupContext.Task.Name);
                 var currentIndex = _engine.Tasks.ToList().IndexOf(currentTask);
                 b.TFBuild.UpdateProgress(_parentRecord, GetProgress(currentIndex, _engine.Tasks.Count));
-                b.TFBuild.Commands.SetProgress(GetProgress(currentIndex, _engine.Tasks.Count), e.TaskSetupContext.Task.Name);
+                //b.TFBuild.Commands.SetProgress(GetProgress(currentIndex, _engine.Tasks.Count), e.TaskSetupContext.Task.Name);
+                b.TFBuild.Commands.SetProgress(GetProgress(currentIndex, _engine.Tasks.Count), string.Empty);
                 var g = e.TaskSetupContext.TFBuild()
                     .Commands.CreateNewRecord(currentTask.Name, "build", TaskRecords.Count + 1,
                         new TFBuildRecordData() {StartTime = DateTime.Now, ParentRecord = _parentRecord, Progress = 0});
@@ -87,7 +88,8 @@ namespace Cake.TFBuild.Module
 
         private int GetProgress(int currentTask, int count)
         {
-            return currentTask/count*100;
+            var f = (double) currentTask / (double) count * 100;
+            return Convert.ToInt32(Math.Truncate(f));
         }
 
         private void BuildSetup(object sender, SetupEventArgs e)
@@ -95,7 +97,8 @@ namespace Cake.TFBuild.Module
             var b = e.Context.BuildSystem();
             if (b.IsRunningOnTFS || b.IsRunningOnVSTS)
             {
-                e.Context.TFBuild().Commands.SetProgress(0, "Build Setup");
+                //e.Context.TFBuild().Commands.SetProgress(0, "Build Setup");
+                e.Context.TFBuild().Commands.SetProgress(0, string.Empty);
                 var g = e.Context.TFBuild()
                     .Commands.CreateNewRecord("Cake Build", "build", 0, new TFBuildRecordData {StartTime = DateTime.Now});
                 _parentRecord = g;
