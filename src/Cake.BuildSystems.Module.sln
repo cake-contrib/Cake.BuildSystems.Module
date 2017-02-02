@@ -7,8 +7,9 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.TFBuild.Module", "Cake
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CCCD79DB-5207-4116-905E-D3B85F24A9D7}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet.config = NuGet.config
 		..\build.cake = ..\build.cake
+		..\cake.config = ..\cake.config
+		NuGet.config = NuGet.config
 	EndProjectSection
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cake.TeamCity.Module", "Cake.TeamCity.Module\Cake.TeamCity.Module.xproj", "{CE947BE5-1B94-4F51-85BD-1365F8D7A10F}"
