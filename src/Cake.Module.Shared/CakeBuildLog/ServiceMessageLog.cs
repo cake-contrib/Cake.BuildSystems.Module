@@ -40,20 +40,39 @@ namespace Cake.Module.Shared
             {
                 try
                 {
-                    var palette = _palettes[level];
-                    var tokens = FormatParser.Parse(format);
-                    foreach (var token in tokens)
+                    if (_match.IsMatch(format))
                     {
-                        if (!_match.IsMatch(format)) SetPalette(token, palette);
-                        if (level > LogLevel.Error)
+                        var tokens = FormatParser.Parse(format);
+                        foreach (var token in tokens)
                         {
-                            _console.Write("{0}", token.Render(args));
-                        }
-                        else
-                        {
-                            _console.WriteError("{0}", token.Render(args));
+                            if (level > LogLevel.Error)
+                            {
+                                _console.Write("{0}", token.Render(args));
+                            }
+                            else
+                            {
+                                _console.WriteError("{0}", token.Render(args));
+                            }
                         }
                     }
+                    else
+                    {
+                        var palette = _palettes[level];
+                        var tokens = FormatParser.Parse(format);
+                        foreach (var token in tokens)
+                        {
+                            SetPalette(token, palette);
+                            if (level > LogLevel.Error)
+                            {
+                                _console.Write("{0}", token.Render(args));
+                            }
+                            else
+                            {
+                                _console.WriteError("{0}", token.Render(args));
+                            }
+                        }
+                    }
+
                 }
                 finally
                 {
