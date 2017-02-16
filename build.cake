@@ -11,7 +11,7 @@ var configuration = Argument("configuration", "Release");
 
 var solutionPath = File("./src/Cake.TFBuild.Module.sln");
 var solution = ParseSolution(solutionPath);
-var projects = solution.Projects;
+var projects = solution.Projects.Where(p => p.Type != "{2150E333-8FDC-42A3-9474-1A3956D46DE8}");
 var projectPaths = projects.Select(p => p.Path.GetDirectory());
 var testAssemblies = projects.Where(p => p.Name.Contains(".Tests")).Select(p => p.Path.GetDirectory() + "/bin/" + configuration + "/" + p.Name + ".dll");
 var artifacts = "./dist/";
@@ -81,11 +81,13 @@ Task("Post-Build")
 	.Does(() =>
 {
 	CreateDirectory(artifacts + "build");
+	CreateDirectory(artifacts + "modules");
 	foreach (var project in projects) {
 		CreateDirectory(artifacts + "build/" + project.Name);
-		CopyFiles(GetFiles(project.Path.GetDirectory() + "/" + project.Name + ".xml"), artifacts + "build/" + project.Name);
-		var files = GetFiles(project.Path.GetDirectory() +"/bin/" +configuration +"/net45/" +project.Name +".*");
+		//CopyFiles(GetFiles(project.Path.GetDirectory() + "/bin/" + configuration + "/net45/" + project.Name + ".xml"), artifacts + "build/" + project.Name);
+		var files = GetFiles(project.Path.GetDirectory() + "/bin/" + configuration + "/net45/" + project.Name +".*");
 		CopyFiles(files, artifacts + "build/" + project.Name);
+		CopyFiles(files, artifacts + "modules/");
 	}
 });
 

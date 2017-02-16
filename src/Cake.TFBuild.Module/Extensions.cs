@@ -13,10 +13,5 @@ namespace Cake.TFBuild.Module
         {
             provider.Commands.UpdateRecord(parent, new TFBuildRecordData {Progress = progress, Status = TFBuildTaskStatus.InProgress});
         }
-
-        public static void UpdateProgress(this ITFBuildProvider provider, Guid parent, int current, int total)
-        {
-            provider.UpdateProgress(parent, current/ total* 100);
-        }
     }
 }

@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using Cake.Core;
 
-namespace Cake.TFBuild.Module
+namespace Cake.Module.Shared
 {
-    public partial class TFBuildEngine
+    public abstract class CakeEngineBase : ICakeEngine
     {
+        protected readonly ICakeEngine _engine;
+        protected CakeEngineBase(ICakeEngine implementation)
+        {
+            _engine = implementation;
+        }
         /// <summary>Registers a new task.</summary>
         /// <param name="name">The name of the task.</param>
         /// <returns>A <see cref="T:Cake.Core.CakeTaskBuilder`1" />.</returns>
