@@ -19,6 +19,7 @@ var testAssemblies = projects.Where(p => p.Name.Contains(".Tests")).Select(p => 
 var artifacts = "./dist/";
 var testResultsPath = MakeAbsolute(Directory(artifacts + "./test-results"));
 GitVersion versionInfo = null;
+var frameworks = new List<string> { "net45", "netstandard1.6"};
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -61,7 +62,10 @@ Task("Restore")
 {
 	// Restore all NuGet packages.
 	Information("Restoring solution...");
-	NuGetRestore(solutionPath);
+	//NuGetRestore(solutionPath);
+	foreach (var project in projectPaths) {
+		DotNetCoreRestore(project.FullPath);
+	}
 });
 
 Task("Build")
@@ -70,12 +74,17 @@ Task("Build")
 	.Does(() =>
 {
 	Information("Building solution...");
-	MSBuild(solutionPath, settings =>
-		settings.SetPlatformTarget(PlatformTarget.MSIL)
-			.WithProperty("TreatWarningsAsErrors","true")
-			.SetVerbosity(Verbosity.Quiet)
-			.WithTarget("Build")
-			.SetConfiguration(configuration));
+	foreach(var framework in frameworks) {
+		foreach (var project in projectPaths) {
+			var settings = new DotNetCoreBuildSettings {
+				Framework = framework,
+				Configuration = configuration,
+				NoIncremental = true,
+			};
+			DotNetCoreBuild(project.FullPath, settings);
+		}
+	}
+	
 });
 
 Task("Post-Build")
