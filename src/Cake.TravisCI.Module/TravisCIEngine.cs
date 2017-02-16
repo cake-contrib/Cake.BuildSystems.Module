@@ -12,14 +12,14 @@ namespace Cake.TravisCI.Module
     public class TravisCIEngine : CakeEngineBase
     {
         private readonly string _buildMessage;
-        public TravisCIEngine(ICakeLog log) : base(new CakeEngine(log))
+        public TravisCIEngine(IConsole console) : base(new CakeEngine(new RawBuildLog(console)))
         {
             _engine.Setup += OnBuildSetup;
             _engine.TaskSetup += OnTaskSetup;
             _engine.TaskTeardown += OnTaskTeardown;
             _engine.Teardown += OnBuildTeardown;
-            _buildMessage = "Cake";
-            //_buildMessage = $"Cake Build (running {_engine.Tasks.Count} tasks)";
+            //_buildMessage = "Cake";
+            _buildMessage = $"Cake Build (running {_engine.Tasks.Count} tasks)";
         }
 
         private void OnBuildTeardown(object sender, TeardownEventArgs e)

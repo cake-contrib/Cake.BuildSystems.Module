@@ -1,3 +1,5 @@
+//#tool "nuget:?package=GitVersion.CommandLine"
+
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 ///////////////////////////////////////////////////////////////////////////////
@@ -9,7 +11,7 @@ var configuration = Argument("configuration", "Release");
 // GLOBAL VARIABLES
 ///////////////////////////////////////////////////////////////////////////////
 
-var solutionPath = File("./src/Cake.TFBuild.Module.sln");
+var solutionPath = File("./src/Cake.BuildSystems.Module.sln");
 var solution = ParseSolution(solutionPath);
 var projects = solution.Projects.Where(p => p.Type != "{2150E333-8FDC-42A3-9474-1A3956D46DE8}");
 var projectPaths = projects.Select(p => p.Path.GetDirectory());
@@ -26,8 +28,8 @@ Setup(ctx =>
 {
 	// Executed BEFORE the first task.
 	Information("Running tasks...");
-	versionInfo = GitVersion();
-	Information("Building for version {0}", versionInfo.FullSemVer);
+	//versionInfo = GitVersion();
+	//Information("Building for version {0}", versionInfo.FullSemVer);
 });
 
 Teardown(ctx =>
