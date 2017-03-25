@@ -17,17 +17,27 @@ namespace Cake.Module.Shared
         private readonly IConsole _console;
         private readonly object _lock;
         private readonly IDictionary<LogLevel, ConsolePalette> _palettes;
-        private readonly Regex _match;
+        private Func<string, bool> _match;
 
         public Verbosity Verbosity { get; set; }
 
         public ServiceMessageLog(IConsole console, System.Text.RegularExpressions.Regex formatExpression, Verbosity verbosity = Verbosity.Normal)
+         : this(console, verbosity)
         {
+            _match = s => formatExpression.IsMatch(s);
+        }
+
+        public ServiceMessageLog(IConsole console, Func<string, bool> match, Verbosity verbosity = Verbosity.Normal) : this(console, verbosity)
+        {
+            if (match == null) throw new ArgumentNullException(nameof(match));
+            _match = match;
+        }
+
+        private ServiceMessageLog(IConsole console, Verbosity verbosity) {
             _console = console;
             _lock = new object();
             _palettes = CreatePalette();
             Verbosity = verbosity;
-            _match = formatExpression;
         }
 
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
@@ -40,7 +50,7 @@ namespace Cake.Module.Shared
             {
                 try
                 {
-                    if (_match.IsMatch(format))
+                    if (_match(format))
                     {
                         var tokens = FormatParser.Parse(format);
                         foreach (var token in tokens)
@@ -76,6 +86,7 @@ namespace Cake.Module.Shared
                 }
                 finally
                 {
+                    _console.WriteLine();
                     _console.ResetColor();
                     if (level > LogLevel.Error)
                     {

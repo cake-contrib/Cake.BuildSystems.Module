@@ -1,28 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Cake.Common.Build;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Core.IO;
+using Cake.Module.Shared;
 
 namespace Cake.TFBuild.Module
 {
-    public class TFBuildReportPrinter : ICakeReportPrinter
+    public class TFBuildReportPrinter : CakeReportPrinterBase
     {
-        private readonly ICakeContext _context;
-        private readonly IConsole _console;
-
-        public TFBuildReportPrinter(IConsole console, ICakeContext context)
+        public TFBuildReportPrinter(IConsole console, ICakeContext context) : base(console, context)
         {
-            _context = context;
-            _console = console;
         }
 
-        public void Write(CakeReport report)
+        public override void Write(CakeReport report)
         {
             if (report == null)
             {
@@ -45,16 +37,16 @@ namespace Cake.TFBuild.Module
 
         private void WriteToMarkdown(CakeReport report)
         {
-            var maxTaskNameLength = 29;
-            foreach (var item in report)
-            {
-                if (item.TaskName.Length > maxTaskNameLength)
+                var maxTaskNameLength = 29;
+                foreach (var item in report)
                 {
-                    maxTaskNameLength = item.TaskName.Length;
+                    if (item.TaskName.Length > maxTaskNameLength)
+                    {
+                        maxTaskNameLength = item.TaskName.Length;
+                    }
                 }
-            }
 
-            maxTaskNameLength++;
+                maxTaskNameLength++;
             string lineFormat = "|{0,-" + maxTaskNameLength + "}|{1,20}|";
 
 
@@ -81,76 +73,6 @@ namespace Cake.TFBuild.Module
             _console.WriteLine($"##vso[task.addattachment type=Distributedtask.Core.Summary;name=Cake Build Summary;]{absFilePath.MakeAbsolute(_context.Environment).FullPath}");
         }
 
-        private void WriteToConsole(CakeReport report)
-        {
-            var maxTaskNameLength = 29;
-            foreach (var item in report)
-            {
-                if (item.TaskName.Length > maxTaskNameLength)
-                {
-                    maxTaskNameLength = item.TaskName.Length;
-                }
-            }
-
-            maxTaskNameLength++;
-            string lineFormat = "{0,-" + maxTaskNameLength + "}{1,-20}";
-            _console.ForegroundColor = ConsoleColor.Green;
-
-            // Write header.
-            _console.WriteLine();
-            _console.WriteLine(lineFormat, "Task", "Duration");
-            _console.WriteLine(new string('-', 20 + maxTaskNameLength));
-
-            // Write task status.
-            foreach (var item in report)
-            {
-                if (ShouldWriteTask(item))
-                {
-                    _console.ForegroundColor = GetItemForegroundColor(item);
-                    _console.WriteLine(lineFormat, item.TaskName, FormatDuration(item));
-                }
-            }
-
-            // Write footer.
-            _console.ForegroundColor = ConsoleColor.Green;
-            _console.WriteLine(new string('-', 20 + maxTaskNameLength));
-            _console.WriteLine(lineFormat, "Total:", FormatTime(GetTotalTime(report)));
-        }
-
-        private bool ShouldWriteTask(CakeReportEntry item)
-        {
-            if (item.ExecutionStatus == CakeTaskExecutionStatus.Delegated)
-            {
-                return _context.Log.Verbosity >= Verbosity.Verbose;
-            }
-
-            return true;
-        }
-
-        private static string FormatTime(TimeSpan time)
-        {
-            return time.ToString("c", CultureInfo.InvariantCulture);
-        }
-
-        private static TimeSpan GetTotalTime(IEnumerable<CakeReportEntry> entries)
-        {
-            return entries.Select(i => i.Duration)
-                .Aggregate(TimeSpan.Zero, (t1, t2) => t1 + t2);
-        }
-
-        private static string FormatDuration(CakeReportEntry item)
-        {
-            if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
-            {
-                return "Skipped";
-            }
-
-            return FormatTime(item.Duration);
-        }
-
-        private static ConsoleColor GetItemForegroundColor(CakeReportEntry item)
-        {
-            return item.ExecutionStatus == CakeTaskExecutionStatus.Executed ? ConsoleColor.Green : ConsoleColor.Gray;
-        }
+        
     }
 }

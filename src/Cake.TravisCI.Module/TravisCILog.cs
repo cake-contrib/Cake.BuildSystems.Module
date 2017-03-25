@@ -9,7 +9,7 @@ namespace Cake.TravisCI.Module
 
     public sealed class TravisCILog : ServiceMessageLog
     {
-        public TravisCILog(IConsole console, Verbosity verbosity = Verbosity.Normal) : base(console, new Regex("travis_fold:(.*)"), verbosity)
+        public TravisCILog(IConsole console, Verbosity verbosity = Verbosity.Normal) : base(console, s => s.StartsWith("travis_fold:"), verbosity)
         {
         }
     }

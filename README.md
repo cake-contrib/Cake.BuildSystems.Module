@@ -25,9 +25,17 @@ Currently this module supports:
 - Current/ongoing build status is updated to currently running task
 - `Error` logging aliases are highlighted in build log output
 
+### MyGet
+
+> Supports the MyGet Build Service
+
+- Task records are added to build logs
+- Includes a task summary in the build log
+- Integrates `Warning`, `Error` and `Fatal` logging aliases with the build log and report 
+
 ### Travis CI
 
-> This module is in-progress and untested
+> This module is affected by a bug in Travis CI's Linux image (see [travis-ci/travis-ci#7262](https://github.com/travis-ci/travis-ci/issues/7262))
 
 - Log folding for the Cake build and for individual tasks
 
@@ -35,4 +43,19 @@ Currently this module supports:
 
 Each build system's functionality resides in its own module, with `Cake.Module.Shared` used for shared types. Each module will conditionally register itself, meaning they will only be loaded in their respective CI environments. This means all modules can be deployed with a single codebase without interference.
 
-Running `build.ps1` with the default target will build all system modules into `dist/modules`. Copy this to `tools/Modules` (and disable the MD5 check if using the bootstrapper) and run your script.
+## Installation
+
+### Using the default bootstrapper
+
+The updated [default bootstrapper](https://github.com/cake-build/resources/tree/develop/build.ps1) can install modules when added to a `packages.config` in the `tools/Modules` directory. Add a new file like below to install this module before execution:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<packages>
+    <package id="Cake.BuildSystems.Module" version="0.1.0" />
+</packages>
+```
+
+### Manually
+
+Running `build.ps1` from this repo with the default target will build all system modules into `dist/modules`. Copy this to your `tools/Modules` (and disable the MD5 check if necessary) and run your script.

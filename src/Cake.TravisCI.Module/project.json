@@ -3,8 +3,8 @@
 
     "dependencies": {
         "NETStandard.Library": "1.6.0",
-        "Cake.Core": "0.18.0-alpha0091",
-        "Cake.Common": "0.18.0-alpha0091",
+        "Cake.Core": "0.18.0",
+        "Cake.Common": "0.18.0",
         "Cake.Module.Shared": {
             "version": "1.0.0",
             "type": "build"
