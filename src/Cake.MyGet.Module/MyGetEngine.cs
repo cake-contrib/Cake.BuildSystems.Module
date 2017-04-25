@@ -26,10 +26,11 @@ namespace Cake.MyGet.Module
             if (b.IsRunningOnMyGet) {
                 _stopwatch.Stop();
                 var messageText = e.TaskTeardownContext.Skipped
-                    ? $"Skipped Task '{e.TaskTeardownContext.Task.Name}'"
-                    : $"Completed Task '{e.TaskTeardownContext.Task.Name}' in {_stopwatch.Elapsed.ToString("c", System.Globalization.CultureInfo.InvariantCulture)}";
-                    _log.Write(Verbosity.Quiet, LogLevel.Information,
-                        "##myget[message text='{0}' status='NORMAL']", messageText);
+                    ? $"Skipped Task {e.TaskTeardownContext.Task.Name}"
+                    : $"Completed Task {e.TaskTeardownContext.Task.Name} in {_stopwatch.Elapsed.ToString("c", System.Globalization.CultureInfo.InvariantCulture)}";
+                    //_log.Write(Verbosity.Quiet, LogLevel.Information,
+                    //    "##myget[message text='{0}' status='NORMAL']", messageText);
+                    Console.WriteLine("##myget[message text='{0}' status='NORMAL']", messageText);
             }
         }
 
@@ -37,9 +38,10 @@ namespace Cake.MyGet.Module
         {
             var b = e.TaskSetupContext.BuildSystem();
             if (b.IsRunningOnMyGet) {
-                var messageText = $"Starting Task '{e.TaskSetupContext.Task.Name}'{(string.IsNullOrWhiteSpace(e.TaskSetupContext.Task.Description) ? string.Empty : $" ({e.TaskSetupContext.Task.Description})")}";
-                _log.Write(Verbosity.Quiet, LogLevel.Information,
-                            "##myget[message text='{0}' status='NORMAL']", messageText);
+                var messageText = $"Starting Task {e.TaskSetupContext.Task.Name}{(string.IsNullOrWhiteSpace(e.TaskSetupContext.Task.Description) ? string.Empty : $" ({e.TaskSetupContext.Task.Description})")}";
+                //_log.Write(Verbosity.Quiet, LogLevel.Information,
+                //            "##myget[message text='{0}' status='NORMAL']", messageText);
+                Console.WriteLine("##myget[message text='{0}' status='NORMAL']", messageText);
                 _stopwatch = _stopwatch.EnsureStarted();
             }
         }
