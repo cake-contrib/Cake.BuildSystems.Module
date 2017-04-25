@@ -45,17 +45,27 @@ Each build system's functionality resides in its own module, with `Cake.Module.S
 
 ## Installation
 
-### Using the default bootstrapper
+### Using the latest bootstrapper
 
-The updated [default bootstrapper](https://github.com/cake-build/resources/tree/develop/build.ps1) can install modules when added to a `packages.config` in the `tools/Modules` directory. Add a new file like below to install this module before execution:
+If you're using the latest bootstrapper example (always available in [this repo](https://github.com/cake-build/resources)), you can simply add a `tools/Modules/packages.config` file with the following contents:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <packages>
-    <package id="Cake.BuildSystems.Module" version="0.1.0" />
+    <package id="Cake.BuildSystems.Module" version="##see below for note on versioning##" />
 </packages>
 ```
 
-### Manually
+The next time you run the bootstrapper, the modules should be installed.
 
-Running `build.ps1` from this repo with the default target will build all system modules into `dist/modules`. Copy this to your `tools/Modules` (and disable the MD5 check if necessary) and run your script.
+### Other methods
+
+You can also integrate this module into your own build process, even with a customised `build.ps1`/`build.sh`. As long as the `Cake.BuildSystems.Module` NuGet package is installed into your modules directory ([by default](http://cakebuild.net/docs/fundamentals/default-configuration-values) `./tools/Modules`), `cake.exe` should pick them up when it runs. Note that you can also change your modules directory using the `cake.config` file or passing arguments to `cake.exe` as outlined in [the documentation](http://cakebuild.net/docs/fundamentals/configuration)).
+
+### Versioning
+
+Note that since modules interact with the internals of Cake, they are tied to a specific version of Cake. The version of Cake supported by the particular module version will always be in the Release Notes of the NuGet package (and therefore also on [nuget.org](https://nuget.org/packages/Cake.BuildSystems.Module/)). Make sure to match this version number to the Cake version you're using.
+
+## Building
+
+Running `build.ps1` with the default target will build all system modules into `dist/modules`. Copy this to `tools/Modules` (you may need to  disable the MD5 check if using the bootstrapper) and run your script.
