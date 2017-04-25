@@ -102,6 +102,36 @@ Task("Post-Build")
 	}
 });
 
+Task("NuGet")
+	.IsDependentOn("Post-Build")
+	.Does(() => 
+{
+	CreateDirectory(artifacts + "package");
+	Information("Building NuGet package");
+	var versionNotes = ParseAllReleaseNotes("./ReleaseNotes.md").FirstOrDefault(v => v.Version.ToString() == versionInfo.MajorMinorPatch);
+	var files = GetFiles(artifacts + "modules/*.dll") + GetFiles(artifacts + "modules/*.xml");
+	var content = files.Select(f => new NuSpecContent { Source = f.FullPath, Target = "lib/netstandard1.6"}).ToList();
+	var settings = new NuGetPackSettings {
+		Id				= "Cake.BuildSystems.Module",
+		Version			= versionInfo.NuGetVersionV2,
+		Title			= "Cake Build Systems Module",
+		Authors		 	= new[] { "Alistair Chapman" },
+		Owners			= new[] { "achapman", "cake-contrib" },
+		Description		= "This Cake module will introduce a number of features for running in hosted CI build environments to tightly integrate with the host environment/tools.",
+		ReleaseNotes	= versionNotes != null ? versionNotes.Notes.ToList() : new List<string>(),
+		Summary			= "A simple Cake module to enhance running from a hosted CI environment.",
+		ProjectUrl		= new Uri("https://github.com/agc93/Cake.BuildSystems.Module"),
+		IconUrl			= new Uri("https://cakeresources.blob.core.windows.net/nuget/64/deployment-64.png"),
+		LicenseUrl		= new Uri("https://raw.githubusercontent.com/agc93/Cake.BuildSystems.Module/master/LICENSE"),
+		Copyright		= "Alistair Chapman 2017",
+		Tags			= new[] { "cake", "build", "ci", "build" },
+		OutputDirectory = artifacts + "/package",
+		Files			= content
+	};
+
+	NuGetPack(settings);
+});
+
 Task("Default")
 	.IsDependentOn("Post-Build");
 
