@@ -28,6 +28,7 @@ Setup(ctx =>
 	// Executed BEFORE the first task.
 	Information("Running tasks...");
 	versionInfo = GitVersion();
+	Debug("Using projects: " + string.Join(", ", projects.SourceProjects.Select(p => p.Name)));
 	//Information("Building for version {0}", versionInfo.FullSemVer);
 });
 
@@ -61,7 +62,6 @@ Task("Restore")
 {
 	// Restore all NuGet packages.
 	Information("Restoring solution...");
-	//NuGetRestore(solutionPath);
 	foreach (var project in projects.AllProjectPaths) {
 		DotNetCoreRestore(project.FullPath);
 	}
@@ -94,7 +94,6 @@ Task("Post-Build")
 	CreateDirectory(artifacts + "modules");
 	foreach (var project in projects.SourceProjects) {
 		CreateDirectory(artifacts + "build/" + project.Name);
-		//CopyFiles(GetFiles(project.Path.GetDirectory() + "/bin/" + configuration + "/net45/" + project.Name + ".xml"), artifacts + "build/" + project.Name);
 		var files = GetFiles(project.Path.GetDirectory() + "/bin/" + configuration + "/net45/" + project.Name +".*");
 		CopyFiles(files, artifacts + "build/" + project.Name);
 		CopyFiles(files, artifacts + "modules/");
@@ -108,8 +107,7 @@ Task("NuGet")
 	CreateDirectory(artifacts + "package");
 	Information("Building NuGet package");
 	var versionNotes = ParseAllReleaseNotes("./ReleaseNotes.md").FirstOrDefault(v => v.Version.ToString() == versionInfo.MajorMinorPatch);
-	//var files = GetFiles(artifacts + "modules/*.dll") + GetFiles(artifacts + "modules/*.xml");
-	var content = GetContent(frameworks, projects, p => !p.Name.Contains(".Shared"));
+	var content = GetContent(frameworks, projects);
 	var settings = new NuGetPackSettings {
 		Id				= "Cake.BuildSystems.Module",
 		Version			= versionInfo.NuGetVersionV2,

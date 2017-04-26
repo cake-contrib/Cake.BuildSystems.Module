@@ -3,6 +3,7 @@ List<NuSpecContent> GetContent(IEnumerable<string> frameworks, ProjectCollection
     var content = new List<NuSpecContent>();
     foreach (var framework in frameworks) {
         foreach (var project in projects.SourceProjects.Where(projectFilter)) {
+            Verbose("Loading package files for " + project.Name);
             var match = GetFiles(project.Path.GetDirectory() + "/bin/" + configuration + "/" + framework + "/" + project.Name +".*");
             var libFiles = match
                 .Where(f => f.GetExtension() != ".pdb")
