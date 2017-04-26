@@ -1,4 +1,5 @@
-//#tool "nuget:?package=GitVersion.CommandLine"
+#load "helpers.cake"
+#tool "nuget:?package=GitVersion.CommandLine"
 
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -12,10 +13,7 @@ var configuration = Argument("configuration", "Release");
 ///////////////////////////////////////////////////////////////////////////////
 
 var solutionPath = File("./src/Cake.BuildSystems.Module.sln");
-var solution = ParseSolution(solutionPath);
-var projects = solution.Projects.Where(p => p.Type != "{2150E333-8FDC-42A3-9474-1A3956D46DE8}");
-var projectPaths = projects.Select(p => p.Path.GetDirectory());
-var testAssemblies = projects.Where(p => p.Name.Contains(".Tests")).Select(p => p.Path.GetDirectory() + "/bin/" + configuration + "/" + p.Name + ".dll");
+var projects = GetProjects(solutionPath);
 var artifacts = "./dist/";
 var testResultsPath = MakeAbsolute(Directory(artifacts + "./test-results"));
 GitVersion versionInfo = null;
@@ -29,7 +27,7 @@ Setup(ctx =>
 {
 	// Executed BEFORE the first task.
 	Information("Running tasks...");
-	//versionInfo = GitVersion();
+	versionInfo = GitVersion();
 	//Information("Building for version {0}", versionInfo.FullSemVer);
 });
 
@@ -47,7 +45,7 @@ Task("Clean")
 	.Does(() =>
 {
 	// Clean solution directories.
-	foreach(var path in projectPaths)
+	foreach(var path in projects.AllProjectPaths)
 	{
 		Information("Cleaning {0}", path);
 		CleanDirectories(path + "/**/bin/" + configuration);
@@ -55,6 +53,7 @@ Task("Clean")
 	}
 	Information("Cleaning common files...");
 	CleanDirectory(artifacts);
+	DeleteFiles(GetFiles("./**/*.temp.nuspec"));
 });
 
 Task("Restore")
@@ -63,7 +62,7 @@ Task("Restore")
 	// Restore all NuGet packages.
 	Information("Restoring solution...");
 	//NuGetRestore(solutionPath);
-	foreach (var project in projectPaths) {
+	foreach (var project in projects.AllProjectPaths) {
 		DotNetCoreRestore(project.FullPath);
 	}
 });
@@ -75,7 +74,7 @@ Task("Build")
 {
 	Information("Building solution...");
 	foreach(var framework in frameworks) {
-		foreach (var project in projectPaths) {
+		foreach (var project in projects.SourceProjectPaths) {
 			var settings = new DotNetCoreBuildSettings {
 				Framework = framework,
 				Configuration = configuration,
@@ -93,7 +92,7 @@ Task("Post-Build")
 {
 	CreateDirectory(artifacts + "build");
 	CreateDirectory(artifacts + "modules");
-	foreach (var project in projects) {
+	foreach (var project in projects.SourceProjects) {
 		CreateDirectory(artifacts + "build/" + project.Name);
 		//CopyFiles(GetFiles(project.Path.GetDirectory() + "/bin/" + configuration + "/net45/" + project.Name + ".xml"), artifacts + "build/" + project.Name);
 		var files = GetFiles(project.Path.GetDirectory() + "/bin/" + configuration + "/net45/" + project.Name +".*");
@@ -109,8 +108,8 @@ Task("NuGet")
 	CreateDirectory(artifacts + "package");
 	Information("Building NuGet package");
 	var versionNotes = ParseAllReleaseNotes("./ReleaseNotes.md").FirstOrDefault(v => v.Version.ToString() == versionInfo.MajorMinorPatch);
-	var files = GetFiles(artifacts + "modules/*.dll") + GetFiles(artifacts + "modules/*.xml");
-	var content = files.Select(f => new NuSpecContent { Source = f.FullPath, Target = "lib/netstandard1.6"}).ToList();
+	//var files = GetFiles(artifacts + "modules/*.dll") + GetFiles(artifacts + "modules/*.xml");
+	var content = GetContent(frameworks, projects, p => !p.Name.Contains(".Shared"));
 	var settings = new NuGetPackSettings {
 		Id				= "Cake.BuildSystems.Module",
 		Version			= versionInfo.NuGetVersionV2,
@@ -126,7 +125,8 @@ Task("NuGet")
 		Copyright		= "Alistair Chapman 2017",
 		Tags			= new[] { "cake", "build", "ci", "build" },
 		OutputDirectory = artifacts + "/package",
-		Files			= content
+		Files			= content,
+		//KeepTemporaryNuSpecFile = true
 	};
 
 	NuGetPack(settings);
