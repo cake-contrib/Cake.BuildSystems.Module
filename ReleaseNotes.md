@@ -3,3 +3,7 @@
 - Supports Cake 0.19.4
 - Initial release with support for Team City and TF Build
 - Experimental support for Travis CI and MyGet Build Services
+
+# 0.1.1
+
+- Supports Cake 0.19.5
