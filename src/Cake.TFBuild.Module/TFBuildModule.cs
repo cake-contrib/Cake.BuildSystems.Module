@@ -3,11 +3,11 @@ using Cake.Core.Annotations;
 using Cake.Core.Composition;
 using Cake.Core.Diagnostics;
 
-[assembly: CakeModule(typeof(Cake.TFBuild.Module.TFBuildEngineModule))]
+[assembly: CakeModule(typeof(Cake.TFBuild.Module.TFBuildModule))]
 
 namespace Cake.TFBuild.Module
 {
-    class TFBuildEngineModule : ICakeModule
+    public class TFBuildModule : ICakeModule
     {
         public void Register(ICakeContainerRegistrar registrar)
         {
