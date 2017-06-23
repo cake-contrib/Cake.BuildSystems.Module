@@ -12,3 +12,7 @@
 
 - Supports Cake 0.19.5
 - Fix for naming and accessibility of TF Build module
+
+# 0.1.3
+
+- Supports Cake 0.20.0
