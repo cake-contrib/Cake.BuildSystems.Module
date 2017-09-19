@@ -2,6 +2,7 @@
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Module.Shared;
+using CakeBuildLog = Cake.Module.Shared.CakeBuildLog;
 
 namespace Cake.TeamCity.Module
 {

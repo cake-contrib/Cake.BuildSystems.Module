@@ -17,7 +17,7 @@ var projects = GetProjects(solutionPath);
 var artifacts = "./dist/";
 var testResultsPath = MakeAbsolute(Directory(artifacts + "./test-results"));
 GitVersion versionInfo = null;
-var frameworks = new List<string> { "net45", "netstandard1.6"};
+var frameworks = new List<string> { "net46", "netstandard1.6"};
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -94,7 +94,7 @@ Task("Post-Build")
 	CreateDirectory(artifacts + "modules");
 	foreach (var project in projects.SourceProjects) {
 		CreateDirectory(artifacts + "build/" + project.Name);
-		var files = GetFiles(project.Path.GetDirectory() + "/bin/" + configuration + "/net45/" + project.Name +".*");
+		var files = GetFiles(project.Path.GetDirectory() + "/bin/" + configuration + "/net46/" + project.Name +".*");
 		CopyFiles(files, artifacts + "build/" + project.Name);
 		CopyFiles(files, artifacts + "modules/");
 	}
