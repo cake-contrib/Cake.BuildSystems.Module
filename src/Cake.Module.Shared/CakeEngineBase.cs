@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cake.Core;
 
 namespace Cake.Module.Shared
@@ -40,15 +41,17 @@ namespace Cake.Module.Shared
         }
 
         /// <summary>
-        ///     Runs the specified target using the specified <see cref="T:Cake.Core.IExecutionStrategy" />.
+        /// Runs the specified target using the specified <see cref="T:Cake.Core.IExecutionStrategy" />.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="strategy">The execution strategy.</param>
         /// <param name="target">The target to run.</param>
-        /// <returns>The resulting report.</returns>
-        public CakeReport RunTarget(ICakeContext context, IExecutionStrategy strategy, string target)
+        /// <returns>
+        /// The resulting report.
+        /// </returns>
+        public Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, string target)
         {
-            return _engine.RunTarget(context, strategy, target);
+            return _engine.RunTargetAsync(context, strategy, target);
         }
 
         /// <summary>
