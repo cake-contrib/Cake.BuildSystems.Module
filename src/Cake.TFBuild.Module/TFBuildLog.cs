@@ -4,7 +4,6 @@ using Cake.Common.Build;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Module.Shared;
-using CakeBuildLog = Cake.Module.Shared.CakeBuildLog;
 
 namespace Cake.TFBuild.Module
 {
@@ -12,7 +11,7 @@ namespace Cake.TFBuild.Module
     {
         public TFBuildLog(IConsole console, Verbosity verbosity = Verbosity.Normal)
         {
-            _cakeLogImplementation = new CakeBuildLog(console, verbosity);
+            _cakeLogImplementation = new Core.Diagnostics.CakeBuildLog(console, verbosity);
         }
         private readonly ICakeLog _cakeLogImplementation;
 
