@@ -24,3 +24,8 @@
 # 0.1.5
 
 - Supports Cake 0.22.2
+
+# 0.2.0
+
+- Supports Cake 0.24.0
+- Updated to use new logging implementation
