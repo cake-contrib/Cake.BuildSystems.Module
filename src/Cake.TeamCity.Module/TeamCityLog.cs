@@ -16,7 +16,7 @@ namespace Cake.TeamCity.Module
 
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
-            if (!string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("TF_BUILD")))
+            if (!string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("TEAMCITY_VERSION")))
             {
                 switch (level)
                 {
