@@ -23,11 +23,11 @@ namespace Cake.TeamCity.Module
                     case LogLevel.Fatal:
                     case LogLevel.Error:
                         _cakeLogImplementation.Write(Verbosity.Quiet, LogLevel.Information,
-                            "##teamcity[buildProblem description='{0}']", string.Format(format, args));
+                            "##teamcity[buildProblem description='{0}']", Escape(string.Format(format, args)));
                         break;
                     case LogLevel.Warning:
                         _cakeLogImplementation.Write(Verbosity.Quiet, LogLevel.Information,
-                            "##teamcity[message text='{0}' status='WARNING']", string.Format(format, args));
+                            "##teamcity[message text='{0}' status='WARNING']", Escape(string.Format(format, args)));
                         break;
                     case LogLevel.Information:
                     case LogLevel.Verbose:
@@ -44,6 +44,16 @@ namespace Cake.TeamCity.Module
         {
             get { return _cakeLogImplementation.Verbosity; }
             set { _cakeLogImplementation.Verbosity = value; }
+        }
+
+        private string Escape(string text)
+        {
+            return text.Replace("|", "||")
+                .Replace("'", "|'")
+                .Replace("\n", "|n")
+                .Replace("\r", "|r")
+                .Replace("[", "|[")
+                .Replace("]", "|]");
         }
     }
 }
