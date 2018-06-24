@@ -15,9 +15,21 @@ namespace Cake.Module.Shared
         /// <summary>Registers a new task.</summary>
         /// <param name="name">The name of the task.</param>
         /// <returns>A <see cref="T:Cake.Core.CakeTaskBuilder`1" />.</returns>
-        public CakeTaskBuilder<ActionTask> RegisterTask(string name)
+        public CakeTaskBuilder RegisterTask(string name)
         {
             return _engine.RegisterTask(name);
+        }
+
+        /// <inheritdoc />
+        public void RegisterSetupAction(Action<ISetupContext> action)
+        {
+            _engine.RegisterSetupAction(action);
+        }
+
+        /// <inheritdoc />
+        public void RegisterSetupAction<TData>(Func<ISetupContext, TData> action) where TData : class
+        {
+            _engine.RegisterSetupAction(action);
         }
 
         /// <summary>
@@ -36,6 +48,12 @@ namespace Cake.Module.Shared
         /// </summary>
         /// <param name="action">The action to be executed.</param>
         public void RegisterTeardownAction(Action<ITeardownContext> action)
+        {
+            _engine.RegisterTeardownAction(action);
+        }
+
+        /// <inheritdoc />
+        public void RegisterTeardownAction<TData>(Action<ITeardownContext, TData> action) where TData : class
         {
             _engine.RegisterTeardownAction(action);
         }
@@ -64,6 +82,12 @@ namespace Cake.Module.Shared
             _engine.RegisterTaskSetupAction(action);
         }
 
+        /// <inheritdoc />
+        public void RegisterTaskSetupAction<TData>(Action<ITaskSetupContext, TData> action) where TData : class
+        {
+            _engine.RegisterTaskSetupAction(action);
+        }
+
         /// <summary>
         ///     Allows registration of an action that's executed after each task has been run.
         ///     If a task setup action or a task fails with or without recovery, the specified task teardown action will still be
@@ -75,9 +99,18 @@ namespace Cake.Module.Shared
             _engine.RegisterTaskTeardownAction(action);
         }
 
+        /// <inheritdoc />
+        public void RegisterTaskTeardownAction<TData>(Action<ITaskTeardownContext, TData> action) where TData : class
+        {
+            _engine.RegisterTaskTeardownAction(action);
+        }
+
+        /// <inheritdoc />
+        IReadOnlyList<ICakeTaskInfo> ICakeEngine.Tasks => _engine.Tasks;
+
         /// <summary>Gets all registered tasks.</summary>
         /// <value>The registered tasks.</value>
-        public IReadOnlyList<CakeTask> Tasks => _engine.Tasks;
+        public IReadOnlyList<ICakeTaskInfo> Tasks => _engine.Tasks;
 
         /// <summary>Raised during setup before any tasks are run.</summary>
         public event EventHandler<SetupEventArgs> Setup

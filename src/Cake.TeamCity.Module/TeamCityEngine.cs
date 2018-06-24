@@ -11,7 +11,7 @@ namespace Cake.TeamCity.Module
 {
     public sealed class TeamCityEngine : CakeEngineBase
     {
-        public TeamCityEngine(ICakeLog log) : base(new CakeEngine(log))
+        public TeamCityEngine(ICakeDataService dataService, ICakeLog log) : base(new CakeEngine(dataService, log))
         {
             _engine.Setup += OnBuildSetup;
             _engine.TaskSetup += OnTaskSetup;

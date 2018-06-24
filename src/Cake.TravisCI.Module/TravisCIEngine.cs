@@ -12,7 +12,7 @@ namespace Cake.TravisCI.Module
     public class TravisCIEngine : CakeEngineBase
     {
         private readonly string _buildMessage;
-        public TravisCIEngine(IConsole console) : base(new CakeEngine(new RawBuildLog(console)))
+        public TravisCIEngine(ICakeDataService dataService, IConsole console) : base(new CakeEngine(dataService, new RawBuildLog(console)))
         {
             _engine.Setup += OnBuildSetup;
             _engine.TaskSetup += OnTaskSetup;
