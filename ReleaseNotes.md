@@ -29,3 +29,10 @@
 
 - Supports Cake 0.24.0
 - Updated to use new logging implementation
+
+# 0.3.0
+
+- Supports Cake 0.28.1
+- Updated with fixed TC engine, including new build statistics
+- Other small fixes
+- Thanks @flcdrg and @micsco for contributions!
