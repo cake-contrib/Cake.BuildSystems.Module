@@ -11,7 +11,7 @@ namespace Cake.TeamCity.Module
 {
     public sealed class TeamCityEngine : CakeEngineBase
     {
-        public TeamCityEngine(ICakeLog log) : base(new CakeEngine(log))
+        public TeamCityEngine(ICakeDataService dataService, ICakeLog log) : base(new CakeEngine(dataService, log))
         {
             _engine.Setup += OnBuildSetup;
             _engine.TaskSetup += OnTaskSetup;
@@ -35,6 +35,9 @@ namespace Cake.TeamCity.Module
             if (b.IsRunningOnTeamCity)
             {
                 var tc = b.TeamCity;
+                var duration = e.TaskTeardownContext.Duration.TotalMilliseconds.ToString("0");
+                // we really should add build statistic values to the TeamCity stuff in Cake, but this will do for now.
+                e.TaskTeardownContext.Log.Information($"##teamcity[buildStatisticValue key='Block.{e.TaskTeardownContext.Task.Name}.Duration' value='{duration}']");
                 tc.WriteEndProgress($"Completed running {e.TaskTeardownContext.Task.Name} task");
                 tc.WriteEndBlock(e.TaskTeardownContext.Task.Name);
             }

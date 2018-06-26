@@ -11,7 +11,7 @@ namespace Cake.MyGet.Module
         private ICakeLog _log;
         private System.Diagnostics.Stopwatch _stopwatch;
 
-        public MyGetEngine(ICakeLog log) : base(new CakeEngine(log))
+        public MyGetEngine(ICakeDataService dataService, ICakeLog log) : base(new CakeEngine(dataService, log))
         {
             _log = log;
             //_engine.Setup += BuildSetup;
