@@ -17,8 +17,9 @@ namespace Cake.TFBuild.Module
         /// <summary>
         /// Initializes a new instance of the <see cref="TFBuildEngine"/> type.
         /// </summary>
+        /// <param name="dataService"></param>
         /// <param name="log">The log.</param>
-        public TFBuildEngine(ICakeLog log) : base(new CakeEngine(log))
+        public TFBuildEngine(ICakeDataService dataService, ICakeLog log) : base(new CakeEngine(dataService, log))
         {
             _engine.Setup += BuildSetup;
             _engine.TaskSetup += OnTaskSetup;
