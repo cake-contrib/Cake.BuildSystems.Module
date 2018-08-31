@@ -5,6 +5,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>Cake.TravisCI.Module</AssemblyName>
     <PackageId>Cake.TravisCI.Module</PackageId>
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="0.28.1" />
-    <PackageReference Include="Cake.Common" Version="0.28.1" />
+    <PackageReference Include="Cake.Core" Version="0.30.0" />
+    <PackageReference Include="Cake.Common" Version="0.30.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
