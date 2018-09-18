@@ -17,7 +17,7 @@ var projects = GetProjects(solutionPath);
 var artifacts = "./dist/";
 var testResultsPath = MakeAbsolute(Directory(artifacts + "./test-results"));
 GitVersion versionInfo = null;
-var frameworks = new List<string> { "net46", "netstandard2.0"};
+var frameworks = new List<string> { "netstandard2.0"};
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
