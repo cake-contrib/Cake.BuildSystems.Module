@@ -36,3 +36,9 @@
 - Updated with fixed TC engine, including new build statistics
 - Other small fixes
 - Thanks @flcdrg and @micsco for contributions!
+
+# 0.3.1
+
+- Supports Cake 0.30.0
+- Retargeted to .NET Standard 2.0 (raise issues if you see new issues from this)
+- Thanks again to @flcdrg and @RaringCoder for contributions and testing!
