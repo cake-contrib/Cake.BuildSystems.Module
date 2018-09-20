@@ -8,6 +8,11 @@ namespace Cake.Module.Shared
     public abstract class CakeEngineBase : ICakeEngine
     {
         protected readonly ICakeEngine _engine;
+
+        /// <summary>
+        /// Creates a new instance of the base Shared Engine used by CI modules.
+        /// </summary>
+        /// <param name="implementation"></param>
         protected CakeEngineBase(ICakeEngine implementation)
         {
             _engine = implementation;
@@ -63,13 +68,13 @@ namespace Cake.Module.Shared
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="strategy">The execution strategy.</param>
-        /// <param name="target">The target to run.</param>
+        /// <param name="settings">The execution settings.</param>
         /// <returns>
         /// The resulting report.
         /// </returns>
-        public Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, string target)
+        public Task<CakeReport> RunTargetAsync(ICakeContext context, IExecutionStrategy strategy, ExecutionSettings settings)
         {
-            return _engine.RunTargetAsync(context, strategy, target);
+            return _engine.RunTargetAsync(context, strategy, settings);
         }
 
         /// <summary>
