@@ -37,18 +37,17 @@ namespace Cake.TFBuild.Module
 
         private void WriteToMarkdown(CakeReport report)
         {
-                var maxTaskNameLength = 29;
-                foreach (var item in report)
+            var maxTaskNameLength = 29;
+            foreach (var item in report)
+            {
+                if (item.TaskName.Length > maxTaskNameLength)
                 {
-                    if (item.TaskName.Length > maxTaskNameLength)
-                    {
-                        maxTaskNameLength = item.TaskName.Length;
-                    }
+                    maxTaskNameLength = item.TaskName.Length;
                 }
+            }
 
-                maxTaskNameLength++;
+            maxTaskNameLength++;
             string lineFormat = "|{0,-" + maxTaskNameLength + "}|{1,20}|";
-
 
             var sb = new StringBuilder();
             sb.AppendLine("");
@@ -62,17 +61,15 @@ namespace Cake.TFBuild.Module
                 }
             }
             sb.AppendLine("");
-            var b = _context.BuildSystem().TFBuild;
-            FilePath agentWorkPath = b.Environment.Agent.WorkingDirectory + "/tasksummary.md";
+
+            FilePath agentWorkPath = System.IO.Path.Combine(Environment.GetEnvironmentVariable("BUILD_STAGINGDIRECTORY"), "tasksummary.md");
             var absFilePath = agentWorkPath.MakeAbsolute(_context.Environment);
             var file = _context.FileSystem.GetFile(absFilePath);
             using (var writer = new StreamWriter(file.OpenWrite())) {
                 writer.Write(sb.ToString());
             }
-            //b.Commands.UploadTaskSummary(absFilePath);
-            _console.WriteLine($"##vso[task.addattachment type=Distributedtask.Core.Summary;name=Cake Build Summary;]{absFilePath.MakeAbsolute(_context.Environment).FullPath}");
-        }
 
-        
+            _console.WriteLine($"##vso[task.addattachment type=Distributedtask.Core.Summary;name=Cake Build Summary;]{absFilePath.FullPath}");
+        }
     }
 }
