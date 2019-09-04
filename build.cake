@@ -119,7 +119,7 @@ Task("NuGet")
 		Summary			= "A simple Cake module to enhance running from a hosted CI environment.",
 		ProjectUrl		= new Uri("https://github.com/agc93/Cake.BuildSystems.Module"),
 		IconUrl			= new Uri("https://cakeresources.blob.core.windows.net/nuget/64/deployment-64.png"),
-		LicenseUrl		= new Uri("https://raw.githubusercontent.com/agc93/Cake.BuildSystems.Module/master/LICENSE"),
+		License 		= new NuSpecLicense() { Type = "expression", Value = "MIT" },
 		Copyright		= "Alistair Chapman 2017",
 		Tags			= new[] { "cake", "build", "ci", "build" },
 		OutputDirectory = artifacts + "/package",
