@@ -8,12 +8,24 @@ using Cake.Module.Shared;
 
 namespace Cake.TFBuild.Module
 {
+    /// <summary>
+    /// The TF Build/Azure Pipelines report printer.
+    /// </summary>
     public class TFBuildReportPrinter : CakeReportPrinterBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TFBuildReportPrinter"/> class.
+        /// </summary>
+        /// <param name="console">The console.</param>
+        /// <param name="context">The context.</param>
         public TFBuildReportPrinter(IConsole console, ICakeContext context) : base(console, context)
         {
         }
 
+        /// <summary>
+        /// Writes the specified report to a target.
+        /// </summary>
+        /// <param name="report">The report to write.</param>
         public override void Write(CakeReport report)
         {
             if (report == null)
@@ -24,7 +36,7 @@ namespace Cake.TFBuild.Module
             try
             {
 
-                if (_context.TFBuild().IsRunningOnTFS || _context.TFBuild().IsRunningOnVSTS) {
+                if (_context.TFBuild().IsRunningOnAzurePipelines || _context.TFBuild().IsRunningOnAzurePipelinesHosted) {
                     WriteToMarkdown(report);
                 }
                 WriteToConsole(report);
@@ -63,7 +75,7 @@ namespace Cake.TFBuild.Module
             }
             sb.AppendLine("");
             var b = _context.BuildSystem().TFBuild;
-            FilePath agentWorkPath = b.Environment.Agent.WorkingDirectory + "/tasksummary.md";
+            FilePath agentWorkPath = b.Environment.Build.ArtifactStagingDirectory + "/tasksummary.md";
             var absFilePath = agentWorkPath.MakeAbsolute(_context.Environment);
             var file = _context.FileSystem.GetFile(absFilePath);
             using (var writer = new StreamWriter(file.OpenWrite())) {
@@ -72,7 +84,5 @@ namespace Cake.TFBuild.Module
             //b.Commands.UploadTaskSummary(absFilePath);
             _console.WriteLine($"##vso[task.addattachment type=Distributedtask.Core.Summary;name=Cake Build Summary;]{absFilePath.MakeAbsolute(_context.Environment).FullPath}");
         }
-
-        
     }
 }

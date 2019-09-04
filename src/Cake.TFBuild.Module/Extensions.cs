@@ -13,5 +13,7 @@ namespace Cake.TFBuild.Module
         {
             provider.Commands.UpdateRecord(parent, new TFBuildRecordData {Progress = progress, Status = TFBuildTaskStatus.InProgress});
         }
+
+        internal static bool IsRunningOnPipelines(this Common.Build.BuildSystem b) => b.IsRunningOnAzurePipelines || b.IsRunningOnAzurePipelinesHosted;
     }
 }

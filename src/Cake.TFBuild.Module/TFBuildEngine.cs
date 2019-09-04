@@ -30,7 +30,7 @@ namespace Cake.TFBuild.Module
         private void OnBuildTeardown(object sender, TeardownEventArgs e)
         {
             var b = e.TeardownContext.BuildSystem();
-            if (b.IsRunningOnVSTS || b.IsRunningOnTFS)
+            if (b.IsRunningOnPipelines())
             {
                 b.TFBuild.Commands.UpdateRecord(_parentRecord, new TFBuildRecordData
                 {
@@ -45,7 +45,7 @@ namespace Cake.TFBuild.Module
         private void OnTaskTeardown(object sender, TaskTeardownEventArgs e)
         {
             var b = e.TaskTeardownContext.BuildSystem();
-            if (b.IsRunningOnVSTS || b.IsRunningOnTFS)
+            if (b.IsRunningOnPipelines())
             {
                 var currentTask = _engine.Tasks.First(t => t.Name == e.TaskTeardownContext.Task.Name);
                 var currentIndex = _engine.Tasks.ToList().IndexOf(currentTask);
@@ -72,7 +72,7 @@ namespace Cake.TFBuild.Module
         private void OnTaskSetup(object sender, TaskSetupEventArgs e)
         {
             var b = e.TaskSetupContext.BuildSystem();
-            if (b.IsRunningOnVSTS || b.IsRunningOnTFS)
+            if (b.IsRunningOnPipelines())
             {
                 var currentTask =
                     _engine.Tasks.First(t => t.Name == e.TaskSetupContext.Task.Name);
@@ -96,7 +96,7 @@ namespace Cake.TFBuild.Module
         private void BuildSetup(object sender, SetupEventArgs e)
         {
             var b = e.Context.BuildSystem();
-            if (b.IsRunningOnTFS || b.IsRunningOnVSTS)
+            if (b.IsRunningOnPipelines())
             {
                 //e.Context.TFBuild().Commands.SetProgress(0, "Build Setup");
                 e.Context.TFBuild().Commands.SetProgress(0, string.Empty);
