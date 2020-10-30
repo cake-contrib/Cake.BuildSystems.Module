@@ -1,0 +1,34 @@
+create:
+  include-footer: true
+  footer-heading: Where to get it
+  footer-content: >
+    You can download this release from
+    [nuget](https://nuget.org/packages/Cake.BuildSystems.Module/{milestone}),
+    or you can just reference it in a cake build script
+    with `#module nuget:?package=Cake.BuildSystems.Module&version={milestone}`.
+  footer-includes-milestone: true
+  milestone-replace-text: "{milestone}"
+export:
+  include-created-date-in-title: true
+  created-date-string-format: yyyy-MM-dd
+  perform-regex-removal: true
+  regex-text: '[\r\n]*### Where to get it[\r\n]*You can .*`\.[\r\n]*'
+  multiline-regex: true
+issue-labels-include:
+  - Breaking change
+  - Bug
+  - Feature
+  - Enhancement
+  - Improvement
+  - Documentation
+  - security
+issue-labels-exclude:
+  - Build
+  - Internal / Refactoring
+issue-labels-alias:
+  - name: Documentation
+    header: Documentation
+    plural: Documentation
+  - name: security
+    header: Security
+    plural: Security

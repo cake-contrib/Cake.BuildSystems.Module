@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <StartYear>2017</StartYear>
+        <EndYear>$([System.DateTime]::Today.Year)</EndYear>
+        <FullYear Condition="'$(StartYear)'=='$(EndYear)'">$(StartYear)</FullYear>
+        <FullYear Condition="'$(StartYear)'!='$(EndYear)'">$(StartYear)-$(EndYear)</FullYear>
+
+        <!-- Properties related to packaging -->
+        <Title>Cake Build Systems Module</Title>
+        <PackageId>Cake.BuildSystems.Module</PackageId>
+        <Version>0.1.0</Version>
+        <Authors>Alistair Chapman</Authors>
+        <Copyright>Copyright © Alistair Chapman $(FullYear)</Copyright>
+        <Description>This Cake module will introduce a number of features for running in hosted CI build environments to tightly integrate with the host environment/tools.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/cake-contrib/Cake.BuildSystems.Module/</PackageProjectUrl>
+        <PackageTags>cake, build, ci</PackageTags>
+        <RepositoryUrl>https://github.com/cake-contrib/Cake.BuildSystems.Module.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageIconUrl>https://cakeresources.blob.core.windows.net/nuget/64/deployment-64.png</PackageIconUrl>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Cake.MyGet.Module\Cake.MyGet.Module.csproj">
+            <PrivateAssets>all</PrivateAssets>
+        </ProjectReference>
+        <ProjectReference Include="..\Cake.TeamCity.Module\Cake.TeamCity.Module.csproj">
+            <PrivateAssets>all</PrivateAssets>
+        </ProjectReference>
+        <ProjectReference Include="..\Cake.AzurePipelines.Module\Cake.AzurePipelines.Module.csproj">
+            <PrivateAssets>all</PrivateAssets>
+        </ProjectReference>
+        <ProjectReference Include="..\Cake.TravisCI.Module\Cake.TravisCI.Module.csproj">
+            <PrivateAssets>all</PrivateAssets>
+        </ProjectReference>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Include="$(OutputPath)/**/*.*" PackagePath="lib/" Pack="true" />
+    </ItemGroup>
+    
+    <Target
+        Name="_cleanupOutput"
+        AfterTargets="AfterBuild;CoreBuild">
+
+        <!-- The output of "this" project is not really needed, anyways. -->
+        <ItemGroup>
+            <ToDelete Include="$(OutputPath)/**/$(AssemblyName).*" />
+        </ItemGroup>
+        <Delete Files="@(ToDelete)" />   
+    </Target>
+</Project>
