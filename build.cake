@@ -118,7 +118,7 @@ Task("NuGet")
 		ReleaseNotes	= versionNotes != null ? versionNotes.Notes.ToList() : new List<string>(),
 		Summary			= "A simple Cake module to enhance running from a hosted CI environment.",
 		ProjectUrl		= new Uri("https://github.com/agc93/Cake.BuildSystems.Module"),
-		IconUrl			= new Uri("https://cakeresources.blob.core.windows.net/nuget/64/deployment-64.png"),
+		IconUrl			= new Uri("https://cdn.rawgit.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png"),
 		License 		= new NuSpecLicense() { Type = "expression", Value = "MIT" },
 		Copyright		= "Alistair Chapman 2017",
 		Tags			= new[] { "cake", "build", "ci", "build" },
