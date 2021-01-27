@@ -16,7 +16,7 @@ namespace Cake.TeamCity.Module
             {
                 registrar.RegisterType<TeamCityEngine>().As<ICakeEngine>().Singleton();
                 registrar.RegisterType<TeamCityLog>().As<ICakeLog>().Singleton();
-                //registrar.RegisterType<TFBuildReportPrinter>().As<ICakeReportPrinter>().Singleton();
+                //registrar.RegisterType<TeamCityReportPrinter>().As<ICakeReportPrinter>().Singleton();
             }
         }
     }

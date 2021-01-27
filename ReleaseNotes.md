@@ -48,3 +48,8 @@
 - Supports Cake 0.34.1
 - Fixes errors writing summary report when run in Azure Pipelines container (#21)
 - Thanks again to @flcdrg for contributions!
+
+# 0.4.0
+
+- Supports Cake 0.38.0
+- Rename TF Build to Azure Pipelines
