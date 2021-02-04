@@ -5,11 +5,11 @@ using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Module.Shared;
 
-namespace Cake.TFBuild.Module
+namespace Cake.AzurePipelines.Module
 {
-    public class TFBuildLog : ICakeLog
+    public class AzurePipelinesLog : ICakeLog
     {
-        public TFBuildLog(IConsole console, Verbosity verbosity = Verbosity.Normal)
+        public AzurePipelinesLog(IConsole console, Verbosity verbosity = Verbosity.Normal)
         {
             _cakeLogImplementation = new Core.Diagnostics.CakeBuildLog(console, verbosity);
         }

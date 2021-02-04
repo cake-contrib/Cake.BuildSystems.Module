@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>Cake.TFBuild.Module</AssemblyName>
-    <PackageId>Cake.TFBuild.Module</PackageId>
+    <AssemblyName>Cake.AzurePipelines.Module</AssemblyName>
+    <PackageId>Cake.AzurePipelines.Module</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="0.34.1" PrivateAssets="All" />
-    <PackageReference Include="Cake.Common" Version="0.34.1" PrivateAssets="All" />
+    <PackageReference Include="Cake.Core" Version="0.38.0" PrivateAssets="All" />
+    <PackageReference Include="Cake.Common" Version="0.38.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

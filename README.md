@@ -8,9 +8,9 @@ This module will introduce a number of features for running in hosted CI build e
 
 Currently this module supports:
 
-### TF Build
+### Azure Pipelines
 
-> This applies to TFS and VSTS
+> This applies to TFS, Azure Pipelines, and Azure DevOps Server
 
 - Individual timeline records for each task
 - Percentage reporting on build progress
