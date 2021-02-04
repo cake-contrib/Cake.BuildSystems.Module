@@ -9,7 +9,7 @@ using Cake.MyGet.Module;
 
 namespace Cake.MyGet.Module
 {
-    class MyGetModule : ICakeModule
+    public class MyGetModule : ICakeModule
     {
         public void Register(ICakeContainerRegistrar registrar)
         {

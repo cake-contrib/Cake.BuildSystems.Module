@@ -8,7 +8,7 @@ using Cake.TeamCity.Module;
 
 namespace Cake.TeamCity.Module
 {
-    class TeamCityModule : ICakeModule
+    public class TeamCityModule : ICakeModule
     {
         public void Register(ICakeContainerRegistrar registrar)
         {
