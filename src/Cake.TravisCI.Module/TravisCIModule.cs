@@ -9,7 +9,7 @@ using Cake.TravisCI.Module;
 
 namespace Cake.TravisCI.Module
 {
-    class TravisCIModule : ICakeModule
+    public class TravisCIModule : ICakeModule
     {
         public void Register(ICakeContainerRegistrar registrar)
         {
