@@ -271,7 +271,7 @@ __pycache__/
 *.pyc
 
 # Cake - Uncomment if you are using it
-tools/**
-!tools/packages.config
+tools/
 
-dist/**
+[Bb]uild[Aa]rtifacts/
+/src/Cake.BuildSystems.Module/icon.png
