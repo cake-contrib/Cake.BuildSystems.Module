@@ -9,17 +9,11 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <StartYear>2017</StartYear>
-        <EndYear>$([System.DateTime]::Today.Year)</EndYear>
-        <FullYear Condition="'$(StartYear)'=='$(EndYear)'">$(StartYear)</FullYear>
-        <FullYear Condition="'$(StartYear)'!='$(EndYear)'">$(StartYear)-$(EndYear)</FullYear>
-
         <!-- Properties related to packaging -->
         <Title>Cake Build Systems Module</Title>
         <PackageId>Cake.BuildSystems.Module</PackageId>
         <Version>0.1.0</Version>
         <Authors>Alistair Chapman</Authors>
-        <Copyright>Copyright © Alistair Chapman $(FullYear)</Copyright>
         <Description>This Cake module will introduce a number of features for running in hosted CI build environments to tightly integrate with the host environment/tools.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/cake-contrib/Cake.BuildSystems.Module/</PackageProjectUrl>

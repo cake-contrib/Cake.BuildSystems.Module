@@ -1,0 +1,6 @@
+[*.cs]
+# some files in this project have headers, some do not
+dotnet_diagnostic.SA1636.severity = none
+
+# namespaces are a wild mix in this project TODO: Need to remove this!
+resharper_check_namespace_highlighting = none

@@ -4,48 +4,67 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Cake.Core;
 using Cake.Core.Diagnostics;
-using Cake.Diagnostics.Formatting;
 using Cake.Diagnostics;
-using System.Text.RegularExpressions;
+using Cake.Diagnostics.Formatting;
 
 namespace Cake.Module.Shared
 {
+    /// <summary>
+    /// Writes the log, colorized.
+    /// </summary>
     public abstract class ServiceMessageLog : ICakeLog
     {
         private readonly IConsole _console;
         private readonly object _lock;
         private readonly IDictionary<LogLevel, ConsolePalette> _palettes;
-        private Func<string, bool> _match;
+        private readonly Func<string, bool> _match;
 
+        /// <inheritdoc />
         public Verbosity Verbosity { get; set; }
 
-        public ServiceMessageLog(IConsole console, System.Text.RegularExpressions.Regex formatExpression, Verbosity verbosity = Verbosity.Normal)
-         : this(console, verbosity)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceMessageLog"/> class.
+        /// </summary>
+        /// <param name="console">The <see cref="IConsole"/> implementation to log to.</param>
+        /// <param name="formatExpression">Expression to check whether a token should be colorized.</param>
+        /// <param name="verbosity">Initial verbosity.</param>
+        public ServiceMessageLog(IConsole console, Regex formatExpression, Verbosity verbosity = Verbosity.Normal)
+            : this(console, verbosity)
         {
             _match = s => formatExpression.IsMatch(s);
         }
 
-        public ServiceMessageLog(IConsole console, Func<string, bool> match, Verbosity verbosity = Verbosity.Normal) : this(console, verbosity)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceMessageLog"/> class.
+        /// </summary>
+        /// <param name="console">The <see cref="IConsole"/> implementation to log to.</param>
+        /// <param name="match">Predicate to check whether a token should be colorized.</param>
+        /// <param name="verbosity">Initial verbosity.</param>
+        public ServiceMessageLog(IConsole console, Func<string, bool> match, Verbosity verbosity = Verbosity.Normal)
+            : this(console, verbosity)
         {
-            if (match == null) throw new ArgumentNullException(nameof(match));
-            _match = match;
+            _match = match ?? throw new ArgumentNullException(nameof(match));
         }
 
-        private ServiceMessageLog(IConsole console, Verbosity verbosity) {
+        private ServiceMessageLog(IConsole console, Verbosity verbosity)
+        {
             _console = console;
             _lock = new object();
             _palettes = CreatePalette();
             Verbosity = verbosity;
         }
 
+        /// <inheritdoc />
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
             if (verbosity > Verbosity)
             {
                 return;
             }
+
             lock (_lock)
             {
                 try
@@ -82,7 +101,6 @@ namespace Cake.Module.Shared
                             }
                         }
                     }
-
                 }
                 finally
                 {
@@ -102,8 +120,7 @@ namespace Cake.Module.Shared
 
         private void SetPalette(FormatToken token, ConsolePalette palette)
         {
-            var property = token as PropertyToken;
-            if (property != null)
+            if (token is PropertyToken)
             {
                 _console.BackgroundColor = palette.ArgumentBackground;
                 _console.ForegroundColor = palette.ArgumentForeground;
@@ -125,7 +142,7 @@ namespace Cake.Module.Shared
                 { LogLevel.Warning, new ConsolePalette(background, ConsoleColor.Yellow, background, ConsoleColor.Yellow) },
                 { LogLevel.Information, new ConsolePalette(background, ConsoleColor.White, ConsoleColor.DarkBlue, ConsoleColor.White) },
                 { LogLevel.Verbose, new ConsolePalette(background, ConsoleColor.Gray, background, ConsoleColor.White) },
-                { LogLevel.Debug, new ConsolePalette(background, ConsoleColor.DarkGray, background, ConsoleColor.Gray) }
+                { LogLevel.Debug, new ConsolePalette(background, ConsoleColor.DarkGray, background, ConsoleColor.Gray) },
             };
             return palette;
         }

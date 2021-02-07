@@ -12,7 +12,8 @@
             "systemUsingDirectivesFirst": true
         },
         "documentationRules": {
-            "xmlHeader": false
+            "xmlHeader": false,
+            "documentInternalElements": false
         }
     }
 }

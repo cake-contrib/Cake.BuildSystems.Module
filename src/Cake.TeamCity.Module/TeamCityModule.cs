@@ -8,15 +8,18 @@ using Cake.TeamCity.Module;
 
 namespace Cake.TeamCity.Module
 {
+    /// <summary>
+    /// <see cref="ICakeModule"/> implementation for TeamCity.
+    /// </summary>
     public class TeamCityModule : ICakeModule
     {
+        /// <inheritdoc cref="ICakeModule.Register"/>
         public void Register(ICakeContainerRegistrar registrar)
         {
             if (!string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("TEAMCITY_VERSION")))
             {
                 registrar.RegisterType<TeamCityEngine>().As<ICakeEngine>().Singleton();
                 registrar.RegisterType<TeamCityLog>().As<ICakeLog>().Singleton();
-                //registrar.RegisterType<TeamCityReportPrinter>().As<ICakeReportPrinter>().Singleton();
             }
         }
     }

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
+    <PropertyGroup>
+        <StartYear>2017</StartYear>
+        <EndYear>$([System.DateTime]::Today.Year)</EndYear>
+        <FullYear Condition="'$(StartYear)'=='$(EndYear)'">$(StartYear)</FullYear>
+        <FullYear Condition="'$(StartYear)'!='$(EndYear)'">$(StartYear)-$(EndYear)</FullYear>
+
+        <Copyright>Copyright © Alistair Chapman $(FullYear)</Copyright>
+        <Product>Cake.BuildSystems.Module</Product>
+    </PropertyGroup>
     <ItemGroup>
         <AdditionalFiles Include="$(SolutionDir)/stylecop.json" Link="stylecop.json" />
         <None Include="$(SolutionDir)/.editorconfig" Link=".editorconfig" />

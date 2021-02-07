@@ -5,12 +5,14 @@ using Cake.Common.Build;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Module.Shared;
+using JetBrains.Annotations;
 
 namespace Cake.AzurePipelines.Module
 {
     /// <summary>
     /// The TF Build/Azure Pipelines report printer.
     /// </summary>
+    [UsedImplicitly]
     public class AzurePipelinesReportPrinter : CakeReportPrinterBase
     {
         /// <summary>
@@ -18,7 +20,8 @@ namespace Cake.AzurePipelines.Module
         /// </summary>
         /// <param name="console">The console.</param>
         /// <param name="context">The context.</param>
-        public AzurePipelinesReportPrinter(IConsole console, ICakeContext context) : base(console, context)
+        public AzurePipelinesReportPrinter(IConsole console, ICakeContext context)
+            : base(console, context)
         {
         }
 
@@ -35,10 +38,12 @@ namespace Cake.AzurePipelines.Module
 
             try
             {
-
-                if (_context.AzurePipelines().IsRunningOnAzurePipelines || _context.AzurePipelines().IsRunningOnAzurePipelinesHosted) {
+                if (_context.AzurePipelines().IsRunningOnAzurePipelines
+                    || _context.AzurePipelines().IsRunningOnAzurePipelinesHosted)
+                {
                     WriteToMarkdown(report);
                 }
+
                 WriteToConsole(report);
             }
             finally
@@ -49,18 +54,17 @@ namespace Cake.AzurePipelines.Module
 
         private void WriteToMarkdown(CakeReport report)
         {
-                var maxTaskNameLength = 29;
-                foreach (var item in report)
+            var maxTaskNameLength = 29;
+            foreach (var item in report)
+            {
+                if (item.TaskName.Length > maxTaskNameLength)
                 {
-                    if (item.TaskName.Length > maxTaskNameLength)
-                    {
-                        maxTaskNameLength = item.TaskName.Length;
-                    }
+                    maxTaskNameLength = item.TaskName.Length;
                 }
+            }
 
-                maxTaskNameLength++;
+            maxTaskNameLength++;
             string lineFormat = "|{0,-" + maxTaskNameLength + "}|{1,20}|";
-
 
             var sb = new StringBuilder();
             sb.AppendLine("");
@@ -73,15 +77,17 @@ namespace Cake.AzurePipelines.Module
                     sb.AppendLine(string.Format(lineFormat, item.TaskName, FormatDuration(item)));
                 }
             }
+
             sb.AppendLine("");
             var b = _context.BuildSystem().AzurePipelines;
             FilePath agentWorkPath = b.Environment.Build.ArtifactStagingDirectory + "/tasksummary.md";
             var absFilePath = agentWorkPath.MakeAbsolute(_context.Environment);
             var file = _context.FileSystem.GetFile(absFilePath);
-            using (var writer = new StreamWriter(file.OpenWrite())) {
+            using (var writer = new StreamWriter(file.OpenWrite()))
+            {
                 writer.Write(sb.ToString());
             }
-            //b.Commands.UploadTaskSummary(absFilePath);
+
             _console.WriteLine($"##vso[task.addattachment type=Distributedtask.Core.Summary;name=Cake Build Summary;]{absFilePath.MakeAbsolute(_context.Environment).FullPath}");
         }
     }

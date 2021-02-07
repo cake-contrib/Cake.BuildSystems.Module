@@ -274,3 +274,9 @@ dotnet_diagnostic.SA1633.severity = none
 # use this.
 dotnet_diagnostic.SA1101.severity = none
 
+# do not document internal members
+resharper_internal_or_private_member_not_documented_highlighting = none
+
+# do not enforce static
+resharper_member_can_be_made_static_local_highlighting = none
+resharper_member_can_be_made_static_global_highlighting = none

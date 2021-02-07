@@ -1,22 +1,33 @@
 ﻿using System;
 using Cake.Core;
 using Cake.Core.Diagnostics;
-using Cake.Module.Shared;
+using JetBrains.Annotations;
 using CakeBuildLog = Cake.Core.Diagnostics.CakeBuildLog;
 
 namespace Cake.TeamCity.Module
 {
+    /// <summary>
+    /// <see cref="ICakeEngine"/> implementation for TeamCity.
+    /// </summary>
+    [UsedImplicitly]
     public class TeamCityLog : ICakeLog
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TeamCityLog"/> class.
+        /// </summary>
+        /// <param name="console">Implementation of <see cref="IConsole"/>.</param>
+        /// <param name="verbosity">Default <see cref="Verbosity"/>.</param>
         public TeamCityLog(IConsole console, Verbosity verbosity = Verbosity.Normal)
         {
             _cakeLogImplementation = new CakeBuildLog(console, verbosity);
         }
+
         private readonly ICakeLog _cakeLogImplementation;
 
+        /// <inheritdoc />
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
-            if (!string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("TEAMCITY_VERSION")))
+            if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TEAMCITY_VERSION")))
             {
                 switch (level)
                 {
@@ -37,9 +48,11 @@ namespace Cake.TeamCity.Module
                         throw new ArgumentOutOfRangeException(nameof(level), level, null);
                 }
             }
+
             _cakeLogImplementation.Write(verbosity, level, format, args);
         }
 
+        /// <inheritdoc />
         public Verbosity Verbosity
         {
             get { return _cakeLogImplementation.Verbosity; }
