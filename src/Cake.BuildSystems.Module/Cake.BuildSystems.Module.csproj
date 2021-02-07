@@ -21,7 +21,7 @@
         <Description>This Cake module will introduce a number of features for running in hosted CI build environments to tightly integrate with the host environment/tools.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/cake-contrib/Cake.BuildSystems.Module/</PackageProjectUrl>
-        <PackageTags>cake, build, ci</PackageTags>
+        <PackageTags>cake, build, ci, tfs, azure devops, azure devops server, myget, teamcity, travisci</PackageTags>
         <RepositoryUrl>https://github.com/cake-contrib/Cake.BuildSystems.Module.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageIconUrl>https://cakeresources.blob.core.windows.net/nuget/64/deployment-64.png</PackageIconUrl>
