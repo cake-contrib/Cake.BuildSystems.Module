@@ -6,19 +6,19 @@ using Cake.Core;
 using Cake.Core.IO;
 using Cake.Module.Shared;
 
-namespace Cake.TFBuild.Module
+namespace Cake.AzurePipelines.Module
 {
     /// <summary>
     /// The TF Build/Azure Pipelines report printer.
     /// </summary>
-    public class TFBuildReportPrinter : CakeReportPrinterBase
+    public class AzurePipelinesReportPrinter : CakeReportPrinterBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TFBuildReportPrinter"/> class.
+        /// Initializes a new instance of the <see cref="AzurePipelinesReportPrinter"/> class.
         /// </summary>
         /// <param name="console">The console.</param>
         /// <param name="context">The context.</param>
-        public TFBuildReportPrinter(IConsole console, ICakeContext context) : base(console, context)
+        public AzurePipelinesReportPrinter(IConsole console, ICakeContext context) : base(console, context)
         {
         }
 
@@ -36,7 +36,7 @@ namespace Cake.TFBuild.Module
             try
             {
 
-                if (_context.TFBuild().IsRunningOnAzurePipelines || _context.TFBuild().IsRunningOnAzurePipelinesHosted) {
+                if (_context.AzurePipelines().IsRunningOnAzurePipelines || _context.AzurePipelines().IsRunningOnAzurePipelinesHosted) {
                     WriteToMarkdown(report);
                 }
                 WriteToConsole(report);
@@ -74,7 +74,7 @@ namespace Cake.TFBuild.Module
                 }
             }
             sb.AppendLine("");
-            var b = _context.BuildSystem().TFBuild;
+            var b = _context.BuildSystem().AzurePipelines;
             FilePath agentWorkPath = b.Environment.Build.ArtifactStagingDirectory + "/tasksummary.md";
             var absFilePath = agentWorkPath.MakeAbsolute(_context.Environment);
             var file = _context.FileSystem.GetFile(absFilePath);

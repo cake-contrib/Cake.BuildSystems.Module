@@ -1,0 +1,13 @@
+name: Run dependabot for cake
+on:
+  workflow_dispatch:
+  schedule:
+    # run everyday at 6
+    - cron:  '0 6 * * *'
+
+jobs:
+  dependabot-cake:
+    runs-on: ubuntu-latest # linux, because this is a docker-action
+    steps:
+      - name: check/update cake dependencies
+        uses: nils-org/dependabot-cake-action@v1

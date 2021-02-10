@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>Cake.TravisCI.Module</AssemblyName>
+    <AssemblyName>Cake.AzurePipelines.Module</AssemblyName>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

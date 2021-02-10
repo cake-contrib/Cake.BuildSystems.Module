@@ -8,9 +8,9 @@ This module will introduce a number of features for running in hosted CI build e
 
 Currently this module supports:
 
-### TF Build
+### Azure Pipelines
 
-> This applies to TFS and VSTS
+> This applies to TFS, Azure Pipelines, and Azure DevOps Server
 
 - Individual timeline records for each task
 - Percentage reporting on build progress
@@ -45,22 +45,22 @@ Each build system's functionality resides in its own module, with `Cake.Module.S
 
 ## Installation
 
-### Using the latest bootstrapper
+### Using the pre-processor directives
 
-If you're using the latest bootstrapper example (always available in [this repo](https://github.com/cake-build/resources)), you can simply add a `tools/Modules/packages.config` file with the following contents:
+Add the next following line to your Cake script:
 
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<packages>
-    <package id="Cake.BuildSystems.Module" version="##see below for note on versioning##" />
-</packages>
+```cs
+#module nuget:?package=Cake.BuildSystems.Module&version=##see below for note on versioning##
 ```
 
-The next time you run the bootstrapper, the modules should be installed.
+Note: The current version can always be taken from [nuget.org](https://nuget.org/packages/Cake.BuildSystems.Module/)).
+
+Currently modules require "bootstrapping", so the first step before running the build is to call `dotnet cake --bootstrap`
+(or `.\build.ps1 --bootstrap`)
 
 ### Other methods
 
-You can also integrate this module into your own build process, even with a customised `build.ps1`/`build.sh`. As long as the `Cake.BuildSystems.Module` NuGet package is installed into your modules directory ([by default](http://cakebuild.net/docs/fundamentals/default-configuration-values) `./tools/Modules`), `cake.exe` should pick them up when it runs. Note that you can also change your modules directory using the `cake.config` file or passing arguments to `cake.exe` as outlined in [the documentation](http://cakebuild.net/docs/fundamentals/configuration)).
+You can also integrate this module into your own build process, even with a customised `build.ps1`/`build.sh`. As long as the `Cake.BuildSystems.Module` NuGet package is installed into your modules directory ([by default](https://cakebuild.net/docs/running-builds/configuration/default-configuration-values) `./tools/Modules`), `cake.exe` should pick them up when it runs. Note that you can also change your modules directory using the `cake.config` file or passing arguments to `cake.exe` as outlined in [the documentation](https://cakebuild.net/docs/running-builds/configuration/set-configuration-values)).
 
 ### Versioning
 
@@ -68,4 +68,4 @@ Note that since modules interact with the internals of Cake, they are tied to a 
 
 ## Building
 
-Running `build.ps1` with the default target will build all system modules into `dist/modules`. Copy this to `tools/Modules` (you may need to  disable the MD5 check if using the bootstrapper) and run your script.
+Running `build.ps1` with the default target will build all system modules into `BuildArtifacts/temp/_PublishedLibraries`. Copy this to `tools/Modules` (you may need to  disable the MD5 check if using the bootstrapper) and run your script.

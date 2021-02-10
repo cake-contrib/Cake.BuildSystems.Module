@@ -9,7 +9,7 @@ using Cake.TravisCI.Module;
 
 namespace Cake.TravisCI.Module
 {
-    class TravisCIModule : ICakeModule
+    public class TravisCIModule : ICakeModule
     {
         public void Register(ICakeContainerRegistrar registrar)
         {
@@ -17,7 +17,7 @@ namespace Cake.TravisCI.Module
             {
                 registrar.RegisterType<TravisCIEngine>().As<ICakeEngine>().Singleton();
                 registrar.RegisterType<TravisCILog>().As<ICakeLog>().Singleton();
-                //registrar.RegisterType<TFBuildReportPrinter>().As<ICakeReportPrinter>().Singleton();
+                //registrar.RegisterType<TravisCIReportPrinter>().As<ICakeReportPrinter>().Singleton();
             }
         }
     }

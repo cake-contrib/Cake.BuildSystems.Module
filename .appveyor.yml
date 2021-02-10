@@ -1,0 +1,19 @@
+image:
+ - Visual Studio 2019
+
+test: off
+build: off
+
+skip_branch_with_pr: true
+branches:
+  only:
+    - develop
+    - master
+    - /release/.*/
+    - /hotfix/.*/
+
+build_script:
+  - ps: .\build.ps1 --target=CI
+
+cache:
+- tools -> recipe.cake
