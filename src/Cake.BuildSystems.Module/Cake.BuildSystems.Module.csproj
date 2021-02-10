@@ -20,7 +20,7 @@
         <PackageTags>cake, build, ci, tfs, azure devops, azure devops server, myget, teamcity, travisci</PackageTags>
         <RepositoryUrl>https://github.com/cake-contrib/Cake.BuildSystems.Module.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageIconUrl>https://cakeresources.blob.core.windows.net/nuget/64/deployment-64.png</PackageIconUrl>
+        <PackageIconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png</PackageIconUrl>
         <PackageIcon>$(CakeContribGuidelinesIconDestinationLocation)</PackageIcon>
     </PropertyGroup>
 
