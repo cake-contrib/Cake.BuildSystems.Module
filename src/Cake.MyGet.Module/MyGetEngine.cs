@@ -3,44 +3,50 @@ using Cake.Common.Build;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Module.Shared;
+using JetBrains.Annotations;
 
 namespace Cake.MyGet.Module
 {
+    /// <summary>
+    /// <see cref="ICakeEngine"/> implementation for MyGet.
+    /// </summary>
+    [UsedImplicitly]
     public class MyGetEngine : CakeEngineBase
     {
-        private ICakeLog _log;
         private System.Diagnostics.Stopwatch _stopwatch;
 
-        public MyGetEngine(ICakeDataService dataService, ICakeLog log) : base(new CakeEngine(dataService, log))
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MyGetEngine"/> class.
+        /// </summary>
+        /// <param name="dataService">Implementation of <see cref="ICakeDataService"/>.</param>
+        /// <param name="log">Implementation of <see cref="ICakeLog"/>.</param>
+        public MyGetEngine(ICakeDataService dataService, ICakeLog log)
+            : base(new CakeEngine(dataService, log))
         {
-            _log = log;
-            //_engine.Setup += BuildSetup;
             _engine.TaskSetup += OnTaskSetup;
             _engine.TaskTeardown += OnTaskTeardown;
-            //_engine.Teardown += OnBuildTeardown;
         }
 
         private void OnTaskTeardown(object sender, TaskTeardownEventArgs e)
         {
             var b = e.TaskTeardownContext.BuildSystem();
-            if (b.IsRunningOnMyGet) {
+            if (b.IsRunningOnMyGet)
+            {
                 _stopwatch.Stop();
                 var messageText = e.TaskTeardownContext.Skipped
                     ? $"Skipped Task {e.TaskTeardownContext.Task.Name}"
                     : $"Completed Task {e.TaskTeardownContext.Task.Name} in {_stopwatch.Elapsed.ToString("c", System.Globalization.CultureInfo.InvariantCulture)}";
-                    //_log.Write(Verbosity.Quiet, LogLevel.Information,
-                    //    "##myget[message text='{0}' status='NORMAL']", messageText);
-                    Console.WriteLine("##myget[message text='{0}' status='NORMAL']", messageText);
+
+                Console.WriteLine("##myget[message text='{0}' status='NORMAL']", messageText);
             }
         }
 
         private void OnTaskSetup(object sender, TaskSetupEventArgs e)
         {
             var b = e.TaskSetupContext.BuildSystem();
-            if (b.IsRunningOnMyGet) {
+            if (b.IsRunningOnMyGet)
+            {
                 var messageText = $"Starting Task {e.TaskSetupContext.Task.Name}{(string.IsNullOrWhiteSpace(e.TaskSetupContext.Task.Description) ? string.Empty : $" ({e.TaskSetupContext.Task.Description})")}";
-                //_log.Write(Verbosity.Quiet, LogLevel.Information,
-                //            "##myget[message text='{0}' status='NORMAL']", messageText);
                 Console.WriteLine("##myget[message text='{0}' status='NORMAL']", messageText);
                 _stopwatch = _stopwatch.EnsureStarted();
             }

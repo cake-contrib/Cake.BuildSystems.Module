@@ -1,24 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Cake.Common.Build;
+﻿using Cake.Common.Build;
 using Cake.Core;
-using Cake.Core.Diagnostics;
 using Cake.Module.Shared;
+using JetBrains.Annotations;
 
 namespace Cake.TravisCI.Module
 {
+    /// <summary>
+    /// <see cref="ICakeEngine"/> implementation for Travis CI.
+    /// </summary>
+    [UsedImplicitly]
     public class TravisCIEngine : CakeEngineBase
     {
         private readonly string _buildMessage;
-        public TravisCIEngine(ICakeDataService dataService, IConsole console) : base(new CakeEngine(dataService, new RawBuildLog(console)))
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TravisCIEngine"/> class.
+        /// </summary>
+        /// <param name="dataService">Implementation of <see cref="ICakeDataService"/>.</param>
+        /// <param name="console">Implementation of <see cref="IConsole"/>.</param>
+        public TravisCIEngine(ICakeDataService dataService, IConsole console)
+            : base(new CakeEngine(dataService, new RawBuildLog(console)))
         {
             _engine.Setup += OnBuildSetup;
             _engine.TaskSetup += OnTaskSetup;
             _engine.TaskTeardown += OnTaskTeardown;
             _engine.Teardown += OnBuildTeardown;
-            //_buildMessage = "Cake";
+
+            // _buildMessage = "Cake";
             _buildMessage = $"Cake Build (running {_engine.Tasks.Count} tasks)";
         }
 

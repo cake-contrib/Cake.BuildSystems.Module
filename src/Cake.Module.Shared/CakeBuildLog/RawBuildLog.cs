@@ -2,22 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Diagnostics.Formatting;
-using Cake.Diagnostics;
 
 namespace Cake.Module.Shared
 {
+    /// <summary>
+    /// Writes the log, as raw.
+    /// </summary>
     public sealed class RawBuildLog : ICakeLog
     {
         private readonly IConsole _console;
         private readonly object _lock;
 
+        /// <inheritdoc />
         public Verbosity Verbosity { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RawBuildLog"/> class.
+        /// </summary>
+        /// <param name="console">The <see cref="IConsole"/> implementation to log to.</param>
+        /// <param name="verbosity">Initial verbosity.</param>
         public RawBuildLog(IConsole console, Verbosity verbosity = Verbosity.Normal)
         {
             _console = console;
@@ -25,12 +31,14 @@ namespace Cake.Module.Shared
             Verbosity = verbosity;
         }
 
+        /// <inheritdoc />
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
             if (verbosity > Verbosity)
             {
                 return;
             }
+
             lock (_lock)
             {
                 try

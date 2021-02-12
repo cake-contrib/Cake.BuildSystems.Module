@@ -7,8 +7,12 @@ using Cake.Core.Diagnostics;
 
 namespace Cake.AzurePipelines.Module
 {
+    /// <summary>
+    /// <see cref="ICakeModule"/> implementation for Azure Pipelines.
+    /// </summary>
     public class AzurePipelinesModule : ICakeModule
     {
+        /// <inheritdoc cref="ICakeModule.Register"/>
         public void Register(ICakeContainerRegistrar registrar)
         {
             if (!string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("TF_BUILD")))

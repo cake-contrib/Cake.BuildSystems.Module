@@ -9,12 +9,16 @@ using Cake.MyGet.Module;
 
 namespace Cake.MyGet.Module
 {
+    /// <summary>
+    /// Implementation of <see cref="ICakeModule"/> for MyGet.
+    /// </summary>
     public class MyGetModule : ICakeModule
     {
+        /// <inheritdoc cref="ICakeModule.Register"/>
         public void Register(ICakeContainerRegistrar registrar)
         {
-            var buildRunner = System.Environment.GetEnvironmentVariable("BuildRunner");
-            if (!string.IsNullOrWhiteSpace(buildRunner) && String.Equals(buildRunner, "MyGet", StringComparison.OrdinalIgnoreCase))
+            var buildRunner = Environment.GetEnvironmentVariable("BuildRunner");
+            if (!string.IsNullOrWhiteSpace(buildRunner) && string.Equals(buildRunner, "MyGet", StringComparison.OrdinalIgnoreCase))
             {
                 registrar.RegisterType<MyGetEngine>().As<ICakeEngine>().Singleton();
                 registrar.RegisterType<MyGetBuildLog>().As<ICakeLog>().Singleton();

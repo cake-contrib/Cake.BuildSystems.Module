@@ -6,12 +6,12 @@ namespace Cake.Diagnostics.Formatting
 {
     internal sealed class LiteralToken : FormatToken
     {
-        public string Text { get; }
-
         public LiteralToken(string text)
         {
             Text = text;
         }
+
+        public string Text { get; }
 
         public override string Render(object[] args)
         {

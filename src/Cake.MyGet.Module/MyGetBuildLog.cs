@@ -3,20 +3,34 @@ using Cake.Core;
 using Cake.Core.Configuration;
 using Cake.Core.Diagnostics;
 using Cake.Module.Shared;
+using JetBrains.Annotations;
 using CakeBuildLog = Cake.Core.Diagnostics.CakeBuildLog;
 
 namespace Cake.MyGet.Module
 {
+    /// <summary>
+    /// Specific log for MyGet.
+    /// </summary>
+    [UsedImplicitly]
     public class MyGetBuildLog : ICakeLog
     {
         private static bool _failOnFatal;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MyGetBuildLog"/> class.
+        /// </summary>
+        /// <param name="console">Implementation of <see cref="IConsole"/>.</param>
+        /// <param name="configuration">Implementation of <see cref="ICakeConfiguration"/>.</param>
+        /// <param name="verbosity">Default <see cref="Verbosity"/>.</param>
         public MyGetBuildLog(IConsole console, ICakeConfiguration configuration, Verbosity verbosity = Verbosity.Normal)
         {
             _failOnFatal = configuration.GetConfigFlag("BuildSystems_FailOnFatal");
             _cakeLogImplementation = new CakeBuildLog(console, verbosity);
         }
+
         private readonly ICakeLog _cakeLogImplementation;
 
+        /// <inheritdoc />
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
             switch (level)
@@ -47,6 +61,7 @@ namespace Cake.MyGet.Module
             }
         }
 
+        /// <inheritdoc />
         public Verbosity Verbosity
         {
             get { return _cakeLogImplementation.Verbosity; }
