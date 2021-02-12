@@ -5,18 +5,26 @@ using Cake.Core;
 
 namespace Cake.Module.Shared
 {
+    /// <summary>
+    /// Base-implementation for a wrapped <see cref="ICakeEngine"/> - the base Shared Engine used by CI modules.
+    /// </summary>
     public abstract class CakeEngineBase : ICakeEngine
     {
+        /// <summary>
+        /// Gets the wrapped <see cref="ICakeEngine"/>.
+        /// </summary>
+        // ReSharper disable once SA1401
         protected readonly ICakeEngine _engine;
 
         /// <summary>
-        /// Creates a new instance of the base Shared Engine used by CI modules.
+        /// Initializes a new instance of the <see cref="CakeEngineBase"/> class.
         /// </summary>
-        /// <param name="implementation"></param>
+        /// <param name="implementation">The wrapped <see cref="ICakeEngine"/>.</param>
         protected CakeEngineBase(ICakeEngine implementation)
         {
             _engine = implementation;
         }
+
         /// <summary>Registers a new task.</summary>
         /// <param name="name">The name of the task.</param>
         /// <returns>A <see cref="T:Cake.Core.CakeTaskBuilder`1" />.</returns>
@@ -32,7 +40,8 @@ namespace Cake.Module.Shared
         }
 
         /// <inheritdoc />
-        public void RegisterSetupAction<TData>(Func<ISetupContext, TData> action) where TData : class
+        public void RegisterSetupAction<TData>(Func<ISetupContext, TData> action)
+            where TData : class
         {
             _engine.RegisterSetupAction(action);
         }
@@ -58,7 +67,8 @@ namespace Cake.Module.Shared
         }
 
         /// <inheritdoc />
-        public void RegisterTeardownAction<TData>(Action<ITeardownContext, TData> action) where TData : class
+        public void RegisterTeardownAction<TData>(Action<ITeardownContext, TData> action)
+            where TData : class
         {
             _engine.RegisterTeardownAction(action);
         }
@@ -88,7 +98,8 @@ namespace Cake.Module.Shared
         }
 
         /// <inheritdoc />
-        public void RegisterTaskSetupAction<TData>(Action<ITaskSetupContext, TData> action) where TData : class
+        public void RegisterTaskSetupAction<TData>(Action<ITaskSetupContext, TData> action)
+            where TData : class
         {
             _engine.RegisterTaskSetupAction(action);
         }
@@ -105,7 +116,8 @@ namespace Cake.Module.Shared
         }
 
         /// <inheritdoc />
-        public void RegisterTaskTeardownAction<TData>(Action<ITaskTeardownContext, TData> action) where TData : class
+        public void RegisterTaskTeardownAction<TData>(Action<ITaskTeardownContext, TData> action)
+            where TData : class
         {
             _engine.RegisterTaskTeardownAction(action);
         }

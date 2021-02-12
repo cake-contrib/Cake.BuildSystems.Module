@@ -1,23 +1,32 @@
 ﻿using System;
-using System.Reflection;
-using Cake.Common.Build;
 using Cake.Core;
 using Cake.Core.Diagnostics;
-using Cake.Module.Shared;
+using JetBrains.Annotations;
 
 namespace Cake.AzurePipelines.Module
 {
+    /// <summary>
+    /// <see cref="ICakeEngine"/> implementation for TF.
+    /// </summary>
+    [UsedImplicitly]
     public class AzurePipelinesLog : ICakeLog
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzurePipelinesLog"/> class.
+        /// </summary>
+        /// <param name="console">Implementation of <see cref="IConsole"/>.</param>
+        /// <param name="verbosity">Default <see cref="Verbosity"/>.</param>
         public AzurePipelinesLog(IConsole console, Verbosity verbosity = Verbosity.Normal)
         {
-            _cakeLogImplementation = new Core.Diagnostics.CakeBuildLog(console, verbosity);
+            _cakeLogImplementation = new CakeBuildLog(console, verbosity);
         }
+
         private readonly ICakeLog _cakeLogImplementation;
 
+        /// <inheritdoc />
         public void Write(Verbosity verbosity, LogLevel level, string format, params object[] args)
         {
-            if (!string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("TF_BUILD")))
+            if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TF_BUILD")))
             {
                 switch (level)
                 {
@@ -38,9 +47,11 @@ namespace Cake.AzurePipelines.Module
                         throw new ArgumentOutOfRangeException(nameof(level), level, null);
                 }
             }
+
             _cakeLogImplementation.Write(verbosity, level, format, args);
         }
 
+        /// <inheritdoc />
         public Verbosity Verbosity
         {
             get { return _cakeLogImplementation.Verbosity; }

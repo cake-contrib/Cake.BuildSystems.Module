@@ -23,6 +23,7 @@ namespace Cake.Diagnostics.Formatting
                 {
                     break;
                 }
+
                 var character = (char)current;
                 if (character == '{')
                 {
@@ -42,11 +43,13 @@ namespace Cake.Diagnostics.Formatting
             {
                 return new LiteralToken("{");
             }
+
             if ((char)reader.Peek() == '{')
             {
                 reader.Read();
                 return new LiteralToken("{{");
             }
+
             var builder = new StringBuilder();
             while (true)
             {
@@ -72,6 +75,7 @@ namespace Cake.Diagnostics.Formatting
                         {
                             throw new FormatException("Input string was not in a correct format.");
                         }
+
                         var position = int.Parse(name, CultureInfo.InvariantCulture);
                         return new PropertyToken(position, format);
                     }
@@ -82,12 +86,15 @@ namespace Cake.Diagnostics.Formatting
                         {
                             throw new FormatException("Input string was not in a correct format.");
                         }
+
                         var position = int.Parse(accumulated, CultureInfo.InvariantCulture);
                         return new PropertyToken(position, null);
                     }
                 }
+
                 builder.Append((char)reader.Read());
             }
+
             return new LiteralToken(builder.ToString());
         }
 
@@ -101,13 +108,16 @@ namespace Cake.Diagnostics.Formatting
                 {
                     break;
                 }
+
                 var character = (char)current;
                 if (character == '{')
                 {
                     break;
                 }
+
                 builder.Append((char)reader.Read());
             }
+
             return new LiteralToken(builder.ToString());
         }
 
@@ -117,6 +127,7 @@ namespace Cake.Diagnostics.Formatting
             {
                 return false;
             }
+
             foreach (var character in value)
             {
                 if (!char.IsDigit(character))
@@ -124,6 +135,7 @@ namespace Cake.Diagnostics.Formatting
                     return false;
                 }
             }
+
             return true;
         }
     }
