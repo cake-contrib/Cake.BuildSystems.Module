@@ -38,11 +38,11 @@
             <PrivateAssets>all</PrivateAssets>
         </ProjectReference>
     </ItemGroup>
-    
+
     <ItemGroup>
-        <None Include="$(OutputPath)/**/*.*" PackagePath="lib/" Pack="true" />
+        <None Include="$(OutputPath)/**/Cake.*" PackagePath="lib/" Pack="true" />
     </ItemGroup>
-    
+
     <ItemGroup>
       <PackageReference Include="CakeContrib.Guidelines" Version="0.5.0">
         <PrivateAssets>all</PrivateAssets>
@@ -53,15 +53,18 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
     </ItemGroup>
-    
-    <Target 
+
+    <Target
         Name="_cleanupOutput"
         AfterTargets="AfterBuild;CoreBuild">
 
         <!-- The output of "this" project is not really needed, anyways. -->
+        <!-- also, Cake.Core and Cake.Common are copied and not needed here. -->
         <ItemGroup>
             <ToDelete Include="$(OutputPath)/**/$(AssemblyName).*" />
+            <ToDelete Include="$(OutputPath)/**/Cake.Core.*" />
+            <ToDelete Include="$(OutputPath)/**/Cake.Common.*" />
         </ItemGroup>
-        <Delete Files="@(ToDelete)" />   
+        <Delete Files="@(ToDelete)" />
     </Target>
 </Project>
