@@ -40,7 +40,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="$(OutputPath)/**/Cake.*" PackagePath="lib/" Pack="true" />
+      <None Include="$(OutputPath)/**/Cake.*" PackagePath="lib/$(TargetFramework)" Pack="true" />
     </ItemGroup>
 
     <ItemGroup>
