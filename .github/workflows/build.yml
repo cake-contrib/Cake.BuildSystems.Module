@@ -2,6 +2,14 @@ name: Build
 
 on:
   push:
+    branches:
+      - main
+      - develop
+      - "feature/**"
+      - "release/**"
+      - "hotfix/**"
+    tags:
+      - "*"
     paths-ignore:
       - "README.md"
   pull_request:
@@ -9,10 +17,9 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [ windows-2019, ubuntu-18.04, macos-10.15 ]
 
     steps:
       - name: Checkout the repository 
@@ -48,7 +55,7 @@ jobs:
 
       - name: Upload Packages
         uses: actions/upload-artifact@v2
-        if: matrix.os == 'windows-latest'
+        if: runner.os == 'Windows'
         with:
           if-no-files-found: warn
           name: package
