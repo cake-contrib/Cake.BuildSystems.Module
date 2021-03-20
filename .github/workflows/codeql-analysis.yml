@@ -24,16 +24,24 @@ jobs:
       with:
         fetch-depth: 0
 
-    - run: git checkout HEAD^2
-      if: ${{ github.event_name == 'pull_request' }}
+    - name: Cache Tools
+      uses: actions/cache@v2
+      with:
+        path: tools
+        key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake') }}
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
       with:
         languages: ${{ matrix.language }}
 
-    - run: ./build.ps1 --target=DotNetCore-Build
-      shell: pwsh
+    - name: Build project
+      uses: cake-build/cake-action@v1
+      with:
+        script-path: recipe.cake
+        target: DotNetCore-Build
+        cake-version: 0.38.5
+        cake-bootstrap: true
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
