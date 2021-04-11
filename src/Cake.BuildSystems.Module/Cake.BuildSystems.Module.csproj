@@ -6,6 +6,12 @@
         <IsPackable>true</IsPackable>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <!--
+          We're setting ProjectType manually.
+          Since we have no reference to Cake in this project,
+          auto-detection of ProjectType will fail
+        -->
+        <CakeContribGuidelinesProjectType>module</CakeContribGuidelinesProjectType>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -20,8 +26,6 @@
         <PackageTags>cake;build;script;cake-build;module;cake-contrib;cake-module;ci;tfs;azure-devops;azure-devops-server;myget;teamcity;travisci</PackageTags>
         <RepositoryUrl>https://github.com/cake-contrib/Cake.BuildSystems.Module.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageIconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png</PackageIconUrl>
-        <PackageIcon>$(CakeContribGuidelinesIconDestinationLocation)</PackageIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -41,10 +45,11 @@
 
     <ItemGroup>
       <None Include="$(OutputPath)/**/Cake.*" PackagePath="lib/$(TargetFramework)" Pack="true" />
+      <None Remove="icon.png" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="CakeContrib.Guidelines" Version="0.5.0">
+      <PackageReference Include="CakeContrib.Guidelines" Version="1.1.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
@@ -54,9 +59,7 @@
       </PackageReference>
     </ItemGroup>
 
-    <Target
-        Name="_cleanupOutput"
-        AfterTargets="AfterBuild;CoreBuild">
+    <Target Name="_cleanupOutput" AfterTargets="AfterBuild;CoreBuild">
 
         <!-- The output of "this" project is not really needed, anyways. -->
         <!-- also, Cake.Core and Cake.Common are copied and not needed here. -->
