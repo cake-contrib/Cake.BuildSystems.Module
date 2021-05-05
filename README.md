@@ -60,9 +60,34 @@ Currently modules require "bootstrapping", so the first step before running the 
 
 ### Other methods
 
-You can also integrate this module into your own build process, even with a customised `build.ps1`/`build.sh`. As long as the `Cake.BuildSystems.Module` NuGet package is installed into your modules directory ([by default](https://cakebuild.net/docs/running-builds/configuration/default-configuration-values) `./tools/Modules`), `cake.exe` should pick them up when it runs. Note that you can also change your modules directory using the `cake.config` file or passing arguments to `cake.exe` as outlined in [the documentation](https://cakebuild.net/docs/running-builds/configuration/set-configuration-values)).
+You can also integrate this module into your own build process, even with a customized `build.ps1`/`build.sh`. As long as the `Cake.BuildSystems.Module` NuGet package is installed into your modules directory ([by default](https://cakebuild.net/docs/running-builds/configuration/default-configuration-values) `./tools/Modules`), `cake.exe` should pick them up when it runs. Note that you can also change your modules directory using the `cake.config` file or passing arguments to `cake.exe` as outlined in [the documentation](https://cakebuild.net/docs/running-builds/configuration/set-configuration-values)).
 
-### Versioning
+### Cake.Frosting
+
+While Cake script will load all modules automatically that are present in the modules directory, the same is not the case when using Cake.Frosting.
+
+Before using Cake.Buildsystems.Module you have to reference the NuGet package either by adding `<PackageReference Include="Cake.BuildSystems.Module" Version="##see below for note on versioning##" />` to the `csproj` file of the build project, or by running `dotnet add package cake.buildsystems.module` in the folder of the build project.
+
+To actually make use of the different modules included in Cake.Buildsystems.Module they need to be registered to the `CakeHost`. This can be done by using `ICakeHost.UseModule<TModule>()`. Typically the `CakeHost` is set up in the `Main` method of the build project. All modules included in Cake.Buildsystems.Module can be registered, regardless of the underlying build system, as each modules will only be triggered for the intended build system.
+
+An example that registers all currently existing modules from Cake.Buildsystems.Module:
+
+```csharp
+public static int Main(string[] args)
+{
+    return new CakeHost()
+        // Register all modules from Cake.Buildsystems.Module
+        .UseModule<AzurePipelinesModule>()
+        .UseModule<MyGetModule>()
+        .UseModule<TravisCIModule>()
+        .UseModule<TeamCityModule>()
+        // continue with the "normal" setup of the CakeHost
+        .UseContext<BuildContext>()
+        .Run(args);
+}
+```
+
+## Versioning
 
 Note that since modules interact with the internals of Cake, they are tied to a specific version of Cake. The version of Cake supported by the particular module version will always be in the Release Notes of the NuGet package (and therefore also on [nuget.org](https://nuget.org/packages/Cake.BuildSystems.Module/)). Make sure to match this version number to the Cake version you're using.
 
