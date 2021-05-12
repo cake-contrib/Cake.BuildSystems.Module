@@ -36,7 +36,7 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Build project
-      uses: cake-build/cake-action@v1
+      uses: cake-build/cake-action@v1.3.0
       with:
         script-path: recipe.cake
         target: DotNetCore-Build
