@@ -49,7 +49,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="CakeContrib.Guidelines" Version="1.1.1">
+      <PackageReference Include="CakeContrib.Guidelines" Version="1.1.2">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
