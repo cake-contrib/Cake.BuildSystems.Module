@@ -23,6 +23,7 @@
         <Description>This Cake module will introduce a number of features for running in hosted CI build environments to tightly integrate with the host environment/tools.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/cake-contrib/Cake.BuildSystems.Module/</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageTags>cake;build;script;cake-build;module;cake-contrib;cake-module;ci;tfs;azure-devops;azure-devops-server;myget;teamcity;travisci</PackageTags>
         <RepositoryUrl>https://github.com/cake-contrib/Cake.BuildSystems.Module.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
@@ -44,6 +45,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="$(ProjectDir)../../README.md" Link="README.md" PackagePath="" Pack="true" />
       <None Include="$(OutputPath)/**/Cake.*" PackagePath="lib/$(TargetFramework)" Pack="true" />
       <None Remove="icon.png" />
     </ItemGroup>
