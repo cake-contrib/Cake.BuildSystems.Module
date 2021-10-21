@@ -14,7 +14,9 @@ BuildParameters.SetParameters(
   shouldRunDotNetCorePack: true,
   shouldUseDeterministicBuilds: true,
   gitterMessage: "@/all " + standardNotificationMessage,
-  twitterMessage: standardNotificationMessage);
+  twitterMessage: standardNotificationMessage,
+  preferredBuildProviderType: BuildProviderType.GitHubActions,
+  preferredBuildAgentOperatingSystem: PlatformFamily.Linux);
 
 BuildParameters.PrintParameters(Context);
 
