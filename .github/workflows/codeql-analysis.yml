@@ -20,12 +20,29 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.4.0
       with:
         fetch-depth: 0
 
+    - uses: actions/setup-dotnet@v1.8.2
+      with:
+        # codecov and unittests need 2.1
+        dotnet-version: '2.1.818'
+    - uses: actions/setup-dotnet@v1.8.2
+      with:
+        dotnet-version: '3.1.414'
+    - uses: actions/setup-dotnet@v1.8.2
+      with:
+        # gitversion needs 5.0
+        dotnet-version: '5.0.402'
+    - uses: actions/setup-dotnet@v1.8.2
+      with:
+        # need at least .NET 6 rc2 to build
+        dotnet-version: '6.0.100-rc.2.21505.57'
+        include-prerelease: true
+
     - name: Cache Tools
-      uses: actions/cache@v2
+      uses: actions/cache@v2.1.6
       with:
         path: tools
         key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake') }}
@@ -36,7 +53,7 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Build project
-      uses: cake-build/cake-action@v1
+      uses: cake-build/cake-action@v1.4.0
       with:
         script-path: recipe.cake
         target: DotNetCore-Build

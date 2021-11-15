@@ -14,10 +14,15 @@ BuildParameters.SetParameters(
   shouldRunDotNetCorePack: true,
   shouldUseDeterministicBuilds: true,
   gitterMessage: "@/all " + standardNotificationMessage,
-  twitterMessage: standardNotificationMessage);
+  twitterMessage: standardNotificationMessage,
+  preferredBuildProviderType: BuildProviderType.GitHubActions,
+  preferredBuildAgentOperatingSystem: PlatformFamily.Linux);
 
 BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context);
+
+ToolSettings.SetToolPreprocessorDirectives(
+    reSharperTools: "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2021.2.0");
 
 Build.RunDotNetCore();
