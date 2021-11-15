@@ -13,8 +13,10 @@ namespace Cake.Module.Shared
         /// <summary>
         /// Gets the wrapped <see cref="ICakeEngine"/>.
         /// </summary>
-        // ReSharper disable once SA1401
+#pragma warning disable SA1401
+        // ReSharper disable once InconsistentNaming
         protected readonly ICakeEngine _engine;
+#pragma warning restore SA1401
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CakeEngineBase"/> class.
@@ -24,6 +26,109 @@ namespace Cake.Module.Shared
         {
             _engine = implementation;
         }
+
+#pragma warning disable CS0618
+        /// <inheritdoc cref="ICakeEngine.Setup"/>
+        [Obsolete]
+        public event EventHandler<SetupEventArgs> Setup
+        {
+            add { _engine.Setup += value; }
+            remove { _engine.Setup -= value; }
+        }
+#pragma warning restore CS0618
+
+        /// <inheritdoc cref="ICakeEngine.BeforeSetup"/>
+        public event EventHandler<BeforeSetupEventArgs> BeforeSetup
+        {
+            add { _engine.BeforeSetup += value; }
+            remove { _engine.BeforeSetup -= value; }
+        }
+
+        /// <inheritdoc cref="ICakeEngine.AfterSetup"/>
+        public event EventHandler<AfterSetupEventArgs> AfterSetup
+        {
+            add { _engine.AfterSetup += value; }
+            remove { _engine.AfterSetup -= value; }
+        }
+
+#pragma warning disable CS0618
+        /// <inheritdoc cref="ICakeEngine.Teardown"/>
+        [Obsolete]
+        public event EventHandler<TeardownEventArgs> Teardown
+        {
+            add { _engine.Teardown += value; }
+            remove { _engine.Teardown -= value; }
+        }
+#pragma warning restore CS0618
+
+        /// <inheritdoc cref="ICakeEngine.BeforeTeardown"/>
+        public event EventHandler<BeforeTeardownEventArgs> BeforeTeardown
+        {
+            add { _engine.BeforeTeardown += value; }
+            remove { _engine.BeforeTeardown -= value; }
+        }
+
+        /// <inheritdoc cref="ICakeEngine.AfterTeardown"/>
+        public event EventHandler<AfterTeardownEventArgs> AfterTeardown
+        {
+            add { _engine.AfterTeardown += value; }
+            remove { _engine.AfterTeardown -= value; }
+        }
+
+#pragma warning disable CS0618
+        /// <inheritdoc cref="ICakeEngine.TaskSetup"/>
+        [Obsolete]
+        public event EventHandler<TaskSetupEventArgs> TaskSetup
+        {
+            add { _engine.TaskSetup += value; }
+            remove { _engine.TaskSetup -= value; }
+        }
+#pragma warning restore CS0618
+
+        /// <inheritdoc cref="ICakeEngine.BeforeTaskSetup"/>
+        public event EventHandler<BeforeTaskSetupEventArgs> BeforeTaskSetup
+        {
+            add { _engine.BeforeTaskSetup += value; }
+            remove { _engine.BeforeTaskSetup -= value; }
+        }
+
+        /// <inheritdoc cref="ICakeEngine.AfterTaskSetup"/>
+        public event EventHandler<AfterTaskSetupEventArgs> AfterTaskSetup
+        {
+            add { _engine.AfterTaskSetup += value; }
+            remove { _engine.AfterTaskSetup -= value; }
+        }
+
+#pragma warning disable CS0618
+        /// <inheritdoc cref="ICakeEngine.TaskTeardown"/>
+        [Obsolete]
+        public event EventHandler<TaskTeardownEventArgs> TaskTeardown
+        {
+            add { _engine.TaskTeardown += value; }
+            remove { _engine.TaskTeardown -= value; }
+        }
+#pragma warning restore CS0618
+
+        /// <inheritdoc cref="ICakeEngine.BeforeTaskTeardown"/>
+        public event EventHandler<BeforeTaskTeardownEventArgs> BeforeTaskTeardown
+        {
+            add { _engine.BeforeTaskTeardown += value; }
+            remove { _engine.BeforeTaskTeardown -= value; }
+        }
+
+        /// <inheritdoc cref="ICakeEngine.AfterTaskTeardown"/>
+        public event EventHandler<AfterTaskTeardownEventArgs> AfterTaskTeardown
+        {
+            add { _engine.AfterTaskTeardown += value; }
+            remove { _engine.AfterTaskTeardown -= value; }
+        }
+
+        /// <inheritdoc />
+        IReadOnlyList<ICakeTaskInfo> ICakeEngine.Tasks => _engine.Tasks;
+
+        /// <summary>Gets all registered tasks.</summary>
+        /// <value>The registered tasks.</value>
+        public IReadOnlyList<ICakeTaskInfo> Tasks => _engine.Tasks;
 
         /// <summary>Registers a new task.</summary>
         /// <param name="name">The name of the task.</param>
@@ -120,43 +225,6 @@ namespace Cake.Module.Shared
             where TData : class
         {
             _engine.RegisterTaskTeardownAction(action);
-        }
-
-        /// <inheritdoc />
-        IReadOnlyList<ICakeTaskInfo> ICakeEngine.Tasks => _engine.Tasks;
-
-        /// <summary>Gets all registered tasks.</summary>
-        /// <value>The registered tasks.</value>
-        public IReadOnlyList<ICakeTaskInfo> Tasks => _engine.Tasks;
-
-        /// <summary>Raised during setup before any tasks are run.</summary>
-        public event EventHandler<SetupEventArgs> Setup
-        {
-            add { _engine.Setup += value; }
-            remove { _engine.Setup -= value; }
-        }
-
-        /// <summary>
-        ///     Raised during teardown after all other tasks have been run.
-        /// </summary>
-        public event EventHandler<TeardownEventArgs> Teardown
-        {
-            add { _engine.Teardown += value; }
-            remove { _engine.Teardown -= value; }
-        }
-
-        /// <summary>Raised before each task is run.</summary>
-        public event EventHandler<TaskSetupEventArgs> TaskSetup
-        {
-            add { _engine.TaskSetup += value; }
-            remove { _engine.TaskSetup -= value; }
-        }
-
-        /// <summary>Raised after each task has been run.</summary>
-        public event EventHandler<TaskTeardownEventArgs> TaskTeardown
-        {
-            add { _engine.TaskTeardown += value; }
-            remove { _engine.TaskTeardown -= value; }
         }
     }
 }

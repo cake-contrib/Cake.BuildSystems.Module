@@ -21,6 +21,6 @@ namespace Cake.AzurePipelines.Module
             provider.Commands.UpdateRecord(parent, new AzurePipelinesRecordData { Progress = progress, Status = AzurePipelinesTaskStatus.InProgress });
         }
 
-        internal static bool IsRunningOnPipelines(this Common.Build.BuildSystem b) => b.IsRunningOnAzurePipelines || b.IsRunningOnAzurePipelinesHosted;
+        internal static bool IsRunningOnPipelines(this Common.Build.BuildSystem b) => b.IsRunningOnAzurePipelines;
     }
 }

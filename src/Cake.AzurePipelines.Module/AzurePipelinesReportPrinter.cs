@@ -38,8 +38,7 @@ namespace Cake.AzurePipelines.Module
 
             try
             {
-                if (_context.AzurePipelines().IsRunningOnAzurePipelines
-                    || _context.AzurePipelines().IsRunningOnAzurePipelinesHosted)
+                if (_context.AzurePipelines().IsRunningOnAzurePipelines)
                 {
                     WriteToMarkdown(report);
                 }
