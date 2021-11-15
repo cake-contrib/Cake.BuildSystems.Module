@@ -20,13 +20,13 @@ namespace Cake.TeamCity.Module
         public TeamCityEngine(ICakeDataService dataService, ICakeLog log)
             : base(new CakeEngine(dataService, log))
         {
-            _engine.Setup += OnBuildSetup;
-            _engine.TaskSetup += OnTaskSetup;
-            _engine.TaskTeardown += OnTaskTeardown;
-            _engine.Teardown += OnBuildTeardown;
+            _engine.BeforeSetup += OnBuildSetup;
+            _engine.BeforeTaskSetup += OnTaskSetup;
+            _engine.BeforeTaskTeardown += OnTaskTeardown;
+            _engine.BeforeTeardown += OnBuildTeardown;
         }
 
-        private void OnBuildTeardown(object sender, TeardownEventArgs e)
+        private void OnBuildTeardown(object sender, BeforeTeardownEventArgs e)
         {
             var b = e.TeardownContext.BuildSystem();
             if (b.IsRunningOnTeamCity)
@@ -36,7 +36,7 @@ namespace Cake.TeamCity.Module
             }
         }
 
-        private void OnTaskTeardown(object sender, TaskTeardownEventArgs e)
+        private void OnTaskTeardown(object sender, BeforeTaskTeardownEventArgs e)
         {
             var b = e.TaskTeardownContext.BuildSystem();
             if (b.IsRunningOnTeamCity)
@@ -51,7 +51,7 @@ namespace Cake.TeamCity.Module
             }
         }
 
-        private void OnTaskSetup(object sender, TaskSetupEventArgs e)
+        private void OnTaskSetup(object sender, BeforeTaskSetupEventArgs e)
         {
             var b = e.TaskSetupContext.BuildSystem();
             if (b.IsRunningOnTeamCity)
@@ -66,7 +66,7 @@ namespace Cake.TeamCity.Module
             }
         }
 
-        private void OnBuildSetup(object sender, SetupEventArgs setupEventArgs)
+        private void OnBuildSetup(object sender, BeforeSetupEventArgs setupEventArgs)
         {
             var b = setupEventArgs.Context.BuildSystem();
             if (b.IsRunningOnTeamCity)

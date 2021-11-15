@@ -21,16 +21,16 @@ namespace Cake.TravisCI.Module
         public TravisCIEngine(ICakeDataService dataService, IConsole console)
             : base(new CakeEngine(dataService, new RawBuildLog(console)))
         {
-            _engine.Setup += OnBuildSetup;
-            _engine.TaskSetup += OnTaskSetup;
-            _engine.TaskTeardown += OnTaskTeardown;
-            _engine.Teardown += OnBuildTeardown;
+            _engine.BeforeSetup += OnBuildSetup;
+            _engine.BeforeTaskSetup += OnTaskSetup;
+            _engine.BeforeTaskTeardown += OnTaskTeardown;
+            _engine.BeforeTeardown += OnBuildTeardown;
 
             // _buildMessage = "Cake";
             _buildMessage = $"Cake Build (running {_engine.Tasks.Count} tasks)";
         }
 
-        private void OnBuildTeardown(object sender, TeardownEventArgs e)
+        private void OnBuildTeardown(object sender, BeforeTeardownEventArgs e)
         {
             var b = e.TeardownContext.BuildSystem();
             if (b.IsRunningOnTravisCI)
@@ -40,7 +40,7 @@ namespace Cake.TravisCI.Module
             }
         }
 
-        private void OnTaskTeardown(object sender, TaskTeardownEventArgs e)
+        private void OnTaskTeardown(object sender, BeforeTaskTeardownEventArgs e)
         {
             var b = e.TaskTeardownContext.BuildSystem();
             if (b.IsRunningOnTravisCI)
@@ -50,7 +50,7 @@ namespace Cake.TravisCI.Module
             }
         }
 
-        private void OnTaskSetup(object sender, TaskSetupEventArgs e)
+        private void OnTaskSetup(object sender, BeforeTaskSetupEventArgs e)
         {
             var b = e.TaskSetupContext.BuildSystem();
             if (b.IsRunningOnTravisCI)
@@ -60,7 +60,7 @@ namespace Cake.TravisCI.Module
             }
         }
 
-        private void OnBuildSetup(object sender, SetupEventArgs e)
+        private void OnBuildSetup(object sender, BeforeSetupEventArgs e)
         {
             var b = e.Context.BuildSystem();
             if (b.IsRunningOnTravisCI)
