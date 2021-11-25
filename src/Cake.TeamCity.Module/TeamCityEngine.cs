@@ -1,7 +1,8 @@
-﻿using Cake.Common.Build;
+using Cake.Common.Build;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Module.Shared;
+
 using JetBrains.Annotations;
 
 namespace Cake.TeamCity.Module
@@ -20,38 +21,40 @@ namespace Cake.TeamCity.Module
         public TeamCityEngine(ICakeDataService dataService, ICakeLog log)
             : base(new CakeEngine(dataService, log))
         {
-            _engine.BeforeSetup += OnBuildSetup;
-            _engine.BeforeTaskSetup += OnTaskSetup;
-            _engine.BeforeTaskTeardown += OnTaskTeardown;
-            _engine.BeforeTeardown += OnBuildTeardown;
+            _engine.BeforeSetup += OnBeforeSetup;
+            _engine.AfterSetup += OnAfterSetup;
+            _engine.BeforeTaskSetup += OnBeforeTaskSetup;
+            _engine.BeforeTaskTeardown += OnBeforeTaskTeardown;
+            _engine.BeforeTeardown += OnBeforeBuildTeardown;
+            _engine.AfterTeardown += OnAfterBuildTeardown;
         }
 
-        private void OnBuildTeardown(object sender, BeforeTeardownEventArgs e)
+        private void OnBeforeSetup(object sender, BeforeSetupEventArgs e)
         {
-            var b = e.TeardownContext.BuildSystem();
+            var b = e.Context.BuildSystem();
             if (b.IsRunningOnTeamCity)
             {
                 var tc = b.TeamCity;
-                tc.WriteEndBlock("Cake Build");
+                tc.WriteStartBlock("Cake Build");
+                tc.WriteStartBlock("Setup");
+                tc.WriteStartProgress("Running Setup");
             }
         }
 
-        private void OnTaskTeardown(object sender, BeforeTaskTeardownEventArgs e)
+        private void OnAfterSetup(object sender, AfterSetupEventArgs e)
         {
-            var b = e.TaskTeardownContext.BuildSystem();
+            var b = e.Context.BuildSystem();
             if (b.IsRunningOnTeamCity)
             {
                 var tc = b.TeamCity;
-                var duration = e.TaskTeardownContext.Duration.TotalMilliseconds.ToString("0");
 
-                // we really should add build statistic values to the TeamCity stuff in Cake, but this will do for now.
-                e.TaskTeardownContext.Log.Information($"##teamcity[buildStatisticValue key='Block.{e.TaskTeardownContext.Task.Name}.Duration' value='{duration}']");
-                tc.WriteEndProgress($"Completed running {e.TaskTeardownContext.Task.Name} task");
-                tc.WriteEndBlock(e.TaskTeardownContext.Task.Name);
+                // we should write out a duration here for statistics, but cake doesn't include it
+                tc.WriteEndProgress("Completed running Setup");
+                tc.WriteEndBlock("Setup");
             }
         }
 
-        private void OnTaskSetup(object sender, BeforeTaskSetupEventArgs e)
+        private void OnBeforeTaskSetup(object sender, BeforeTaskSetupEventArgs e)
         {
             var b = e.TaskSetupContext.BuildSystem();
             if (b.IsRunningOnTeamCity)
@@ -66,13 +69,43 @@ namespace Cake.TeamCity.Module
             }
         }
 
-        private void OnBuildSetup(object sender, BeforeSetupEventArgs setupEventArgs)
+        private void OnBeforeTaskTeardown(object sender, BeforeTaskTeardownEventArgs e)
         {
-            var b = setupEventArgs.Context.BuildSystem();
+            var b = e.TaskTeardownContext.BuildSystem();
             if (b.IsRunningOnTeamCity)
             {
                 var tc = b.TeamCity;
-                tc.WriteStartBlock("Cake Build");
+                var duration = e.TaskTeardownContext.Duration.TotalMilliseconds.ToString("0");
+
+                // we really should add build statistic values to the TeamCity stuff in Cake, but this will do for now.
+                e.TaskTeardownContext.Log.Information($"##teamcity[buildStatisticValue key='Block.{e.TaskTeardownContext.Task.Name}.Duration' value='{duration}']");
+                tc.WriteEndProgress($"Completed running {e.TaskTeardownContext.Task.Name} task");
+                tc.WriteEndBlock(e.TaskTeardownContext.Task.Name);
+            }
+        }
+
+        private void OnBeforeBuildTeardown(object sender, BeforeTeardownEventArgs e)
+        {
+            var b = e.TeardownContext.BuildSystem();
+            if (b.IsRunningOnTeamCity)
+            {
+                var tc = b.TeamCity;
+                tc.WriteStartBlock("Teardown");
+                tc.WriteStartProgress("Running Teardown");
+            }
+        }
+
+        private void OnAfterBuildTeardown(object sender, AfterTeardownEventArgs e)
+        {
+            var b = e.TeardownContext.BuildSystem();
+            if (b.IsRunningOnTeamCity)
+            {
+                var tc = b.TeamCity;
+
+                // we should write out a duration here for statistics, but cake doesn't include it
+                tc.WriteEndProgress("Completed running Teardown");
+                tc.WriteEndBlock("Teardown");
+                tc.WriteEndBlock("Cake Build");
             }
         }
     }
