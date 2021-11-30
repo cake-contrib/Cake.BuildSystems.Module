@@ -24,13 +24,13 @@ namespace Cake.AzurePipelines.Module
         public AzurePipelinesEngine(ICakeDataService dataService, ICakeLog log)
             : base(new CakeEngine(dataService, log))
         {
-            _engine.Setup += BuildSetup;
-            _engine.TaskSetup += OnTaskSetup;
-            _engine.TaskTeardown += OnTaskTeardown;
-            _engine.Teardown += OnBuildTeardown;
+            _engine.BeforeSetup += BuildSetup;
+            _engine.BeforeTaskSetup += OnTaskSetup;
+            _engine.BeforeTaskTeardown += OnTaskTeardown;
+            _engine.BeforeTeardown += OnBuildTeardown;
         }
 
-        private void OnBuildTeardown(object sender, TeardownEventArgs e)
+        private void OnBuildTeardown(object sender, BeforeTeardownEventArgs e)
         {
             var b = e.TeardownContext.BuildSystem();
             if (b.IsRunningOnPipelines())
@@ -45,7 +45,7 @@ namespace Cake.AzurePipelines.Module
             }
         }
 
-        private void OnTaskTeardown(object sender, TaskTeardownEventArgs e)
+        private void OnTaskTeardown(object sender, BeforeTaskTeardownEventArgs e)
         {
             var b = e.TaskTeardownContext.BuildSystem();
             if (b.IsRunningOnPipelines())
@@ -74,7 +74,7 @@ namespace Cake.AzurePipelines.Module
             return AzurePipelinesTaskResult.Succeeded;
         }
 
-        private void OnTaskSetup(object sender, TaskSetupEventArgs e)
+        private void OnTaskSetup(object sender, BeforeTaskSetupEventArgs e)
         {
             var b = e.TaskSetupContext.BuildSystem();
             if (b.IsRunningOnPipelines())
@@ -97,7 +97,7 @@ namespace Cake.AzurePipelines.Module
             return Convert.ToInt32(Math.Truncate(f));
         }
 
-        private void BuildSetup(object sender, SetupEventArgs e)
+        private void BuildSetup(object sender, BeforeSetupEventArgs e)
         {
             var b = e.Context.BuildSystem();
             if (b.IsRunningOnPipelines())

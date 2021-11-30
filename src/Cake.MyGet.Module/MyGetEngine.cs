@@ -23,11 +23,11 @@ namespace Cake.MyGet.Module
         public MyGetEngine(ICakeDataService dataService, ICakeLog log)
             : base(new CakeEngine(dataService, log))
         {
-            _engine.TaskSetup += OnTaskSetup;
-            _engine.TaskTeardown += OnTaskTeardown;
+            _engine.BeforeTaskSetup += OnTaskSetup;
+            _engine.BeforeTaskTeardown += OnTaskTeardown;
         }
 
-        private void OnTaskTeardown(object sender, TaskTeardownEventArgs e)
+        private void OnTaskTeardown(object sender, BeforeTaskTeardownEventArgs e)
         {
             var b = e.TaskTeardownContext.BuildSystem();
             if (b.IsRunningOnMyGet)
@@ -41,7 +41,7 @@ namespace Cake.MyGet.Module
             }
         }
 
-        private void OnTaskSetup(object sender, TaskSetupEventArgs e)
+        private void OnTaskSetup(object sender, BeforeTaskSetupEventArgs e)
         {
             var b = e.TaskSetupContext.BuildSystem();
             if (b.IsRunningOnMyGet)

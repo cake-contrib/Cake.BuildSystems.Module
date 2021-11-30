@@ -11,6 +11,6 @@
     </PropertyGroup>
     <ItemGroup>
         <AdditionalFiles Include="$(SolutionDir)/stylecop.json" Link="stylecop.json" />
-        <None Include="$(SolutionDir)/.editorconfig" Link=".editorconfig" />
+        <None Include="$(SolutionDir)/.editorconfig" Link=".editorconfig (global)" />
     </ItemGroup>
 </Project>

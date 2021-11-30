@@ -1,17 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <IsPackable>true</IsPackable>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <!--
-          We're setting ProjectType manually.
+          We're setting ProjectType and Cake version manually.
           Since we have no reference to Cake in this project,
-          auto-detection of ProjectType will fail
+          auto-detection of ProjectType/Version will fail
         -->
         <CakeContribGuidelinesProjectType>module</CakeContribGuidelinesProjectType>
+        <CakeContribGuidelinesOverrideTargetFrameworkCakeVersion>2.0.0</CakeContribGuidelinesOverrideTargetFrameworkCakeVersion>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -51,7 +52,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="CakeContrib.Guidelines" Version="1.1.2">
+      <PackageReference Include="CakeContrib.Guidelines" Version="1.3.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
