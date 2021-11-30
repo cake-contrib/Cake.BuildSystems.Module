@@ -52,7 +52,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="CakeContrib.Guidelines" Version="1.3.0-rc0002">
+      <PackageReference Include="CakeContrib.Guidelines" Version="1.3.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
