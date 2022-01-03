@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cake.Common.Build;
@@ -24,17 +24,54 @@ namespace Cake.AzurePipelines.Module
         public AzurePipelinesEngine(ICakeDataService dataService, ICakeLog log)
             : base(new CakeEngine(dataService, log))
         {
-            _engine.BeforeSetup += BuildSetup;
-            _engine.BeforeTaskSetup += OnTaskSetup;
-            _engine.BeforeTaskTeardown += OnTaskTeardown;
-            _engine.BeforeTeardown += OnBuildTeardown;
+            _log = log;
+            _engine.BeforeSetup += OnBeforeSetup;
+            _engine.AfterSetup += OnAfterSetup;
+
+            _engine.BeforeTaskSetup += OnBeforeTaskSetup;
+
+            _engine.BeforeTaskTeardown += OnBeforeTaskTeardown;
+
+            _engine.AfterTaskTeardown += OnAfterTaskTeardown;
+
+            _engine.BeforeTeardown += OnBeforeTeardown;
+            _engine.AfterTeardown += OnAfterTeardown;
         }
 
-        private void OnBuildTeardown(object sender, BeforeTeardownEventArgs e)
+        private void OnAfterTaskTeardown(object sender, AfterTaskTeardownEventArgs e)
+        {
+            var b = e.TaskTeardownContext.BuildSystem();
+            if (b.IsRunningOnPipelines())
+            {
+                WriteGroupEndCommand();
+            }
+        }
+
+        private void OnAfterTeardown(object sender, AfterTeardownEventArgs e)
         {
             var b = e.TeardownContext.BuildSystem();
             if (b.IsRunningOnPipelines())
             {
+                WriteGroupEndCommand();
+            }
+        }
+
+        private void OnAfterSetup(object sender, AfterSetupEventArgs e)
+        {
+            var b = e.Context.BuildSystem();
+            if (b.IsRunningOnPipelines())
+            {
+                WriteGroupEndCommand();
+            }
+        }
+
+        private void OnBeforeTeardown(object sender, BeforeTeardownEventArgs e)
+        {
+            var b = e.TeardownContext.BuildSystem();
+            if (b.IsRunningOnPipelines())
+            {
+                WriteGroupCommand("Teardown");
+
                 b.AzurePipelines.Commands.UpdateRecord(_parentRecord, new AzurePipelinesRecordData
                 {
                     FinishTime = DateTime.Now,
@@ -45,7 +82,7 @@ namespace Cake.AzurePipelines.Module
             }
         }
 
-        private void OnTaskTeardown(object sender, BeforeTaskTeardownEventArgs e)
+        private void OnBeforeTaskTeardown(object sender, BeforeTaskTeardownEventArgs e)
         {
             var b = e.TaskTeardownContext.BuildSystem();
             if (b.IsRunningOnPipelines())
@@ -74,11 +111,13 @@ namespace Cake.AzurePipelines.Module
             return AzurePipelinesTaskResult.Succeeded;
         }
 
-        private void OnTaskSetup(object sender, BeforeTaskSetupEventArgs e)
+        private void OnBeforeTaskSetup(object sender, BeforeTaskSetupEventArgs e)
         {
             var b = e.TaskSetupContext.BuildSystem();
             if (b.IsRunningOnPipelines())
             {
+                WriteGroupCommand(e.TaskSetupContext.Task.Name);
+
                 var currentTask =
                     _engine.Tasks.First(t => t.Name == e.TaskSetupContext.Task.Name);
                 var currentIndex = _engine.Tasks.ToList().IndexOf(currentTask);
@@ -97,11 +136,13 @@ namespace Cake.AzurePipelines.Module
             return Convert.ToInt32(Math.Truncate(f));
         }
 
-        private void BuildSetup(object sender, BeforeSetupEventArgs e)
+        private void OnBeforeSetup(object sender, BeforeSetupEventArgs e)
         {
             var b = e.Context.BuildSystem();
             if (b.IsRunningOnPipelines())
             {
+                WriteGroupCommand("Setup");
+
                 e.Context.AzurePipelines().Commands.SetProgress(0, string.Empty);
                 var g = e.Context.AzurePipelines()
                     .Commands.CreateNewRecord("Cake Build", "build", 0, new AzurePipelinesRecordData { StartTime = DateTime.Now });
@@ -109,7 +150,19 @@ namespace Cake.AzurePipelines.Module
             }
         }
 
+        private void WriteGroupCommand(string groupName)
+        {
+            _log.Verbose(string.Empty);
+            _log.Information("##[group]{0}", groupName);
+        }
+
+        private void WriteGroupEndCommand()
+        {
+            _log.Information("##[endgroup]");
+        }
+
         private Guid _parentRecord;
+        private ICakeLog _log;
 
         private Dictionary<string, Guid> TaskRecords { get; } = new Dictionary<string, Guid>();
     }
