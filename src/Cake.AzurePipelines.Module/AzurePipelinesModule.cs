@@ -17,7 +17,6 @@ namespace Cake.AzurePipelines.Module
         {
             if (!string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("TF_BUILD")))
             {
-                registrar.RegisterType<AzurePipelinesExecutionStrategy>().As<IExecutionStrategy>().Singleton();
                 registrar.RegisterType<AzurePipelinesEngine>().As<ICakeEngine>().Singleton();
                 registrar.RegisterType<AzurePipelinesLog>().As<ICakeLog>().Singleton();
                 registrar.RegisterType<AzurePipelinesReportPrinter>().As<ICakeReportPrinter>().Singleton();
