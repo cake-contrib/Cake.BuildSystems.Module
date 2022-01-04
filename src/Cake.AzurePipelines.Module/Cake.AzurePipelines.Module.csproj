@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -6,10 +6,6 @@
     <AssemblyName>Cake.AzurePipelines.Module</AssemblyName>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="AzurePipelinesExecutionStrategy.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Cake.Module.Shared\Cake.Module.Shared.csproj" />
