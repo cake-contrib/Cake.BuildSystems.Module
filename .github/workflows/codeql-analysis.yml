@@ -24,18 +24,18 @@ jobs:
       with:
         fetch-depth: 0
 
-    - uses: actions/setup-dotnet@v1.9.1
+    - uses: actions/setup-dotnet@v2
       with:
         # codecov and unittests need 2.1
         dotnet-version: '2.1.818'
-    - uses: actions/setup-dotnet@v1.9.1
+    - uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '3.1.414'
-    - uses: actions/setup-dotnet@v1.9.1
+    - uses: actions/setup-dotnet@v2
       with:
         # gitversion needs 5.0
         dotnet-version: '5.0.402'
-    - uses: actions/setup-dotnet@v1.9.1
+    - uses: actions/setup-dotnet@v2
       with:
         # need at least .NET 6 rc2 to build
         dotnet-version: '6.0.100-rc.2.21505.57'
