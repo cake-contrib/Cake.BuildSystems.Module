@@ -83,7 +83,7 @@ jobs:
 
       # currently, Cake.Recipe does not upload artifacts when run on gh-actions
       - name: Upload Issues
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           if-no-files-found: warn
           name: ${{ matrix.os }} Issues
@@ -92,7 +92,7 @@ jobs:
             BuildArtifacts/**/coverlet/*.xml
 
       - name: Upload Packages
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: runner.os == 'Windows'
         with:
           if-no-files-found: warn
