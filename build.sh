@@ -9,6 +9,4 @@ export DOTNET_NOLOGO=1
 
 dotnet tool restore
 
-dotnet cake recipe.cake --bootstrap
-
 dotnet cake recipe.cake "$@"
