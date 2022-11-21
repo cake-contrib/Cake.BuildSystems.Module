@@ -19,7 +19,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ windows-2019, ubuntu-18.04, macos-10.15 ]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     env:
       AZURE_PASSWORD: ${{ secrets.AZURE_PASSWORD }}
@@ -44,46 +44,45 @@ jobs:
 
     steps:
       - name: Checkout the repository 
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
       
       - name: Fetch all tags and branches
         run: git fetch --prune --unshallow
 
-      - uses: actions/setup-dotnet@v1.9.0
+      - uses: actions/setup-dotnet@v3.0.3
         with:
           # codecov and unittests need 2.1
           dotnet-version: '2.1.818'
-      - uses: actions/setup-dotnet@v1.9.0
+      - uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: '3.1.414'
-      - uses: actions/setup-dotnet@v1.9.0
+      - uses: actions/setup-dotnet@v3.0.3
         with:
           # gitversion needs 5.0
           dotnet-version: '5.0.402'
-      - uses: actions/setup-dotnet@v1.9.0
+      - uses: actions/setup-dotnet@v3.0.3
         with:
-          # need at least .NET 6 rc2 to build
-          dotnet-version: '6.0.100-rc.2.21505.57'
+          # need at least .NET 6 to build
+          dotnet-version: '6.0.400'
           include-prerelease: true
 
       - name: Cache Tools
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: tools
           key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake') }}
 
       - name: Build project
-        uses: cake-build/cake-action@v1.4.0
+        uses: cake-build/cake-action@v1.4.1
         with:
           script-path: recipe.cake
           target: CI
           verbosity: Diagnostic
-          cake-version: 0.38.5
-          cake-bootstrap: true
+          cake-version: 1.3.0
 
       # currently, Cake.Recipe does not upload artifacts when run on gh-actions
       - name: Upload Issues
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           if-no-files-found: warn
           name: ${{ matrix.os }} Issues
@@ -92,7 +91,7 @@ jobs:
             BuildArtifacts/**/coverlet/*.xml
 
       - name: Upload Packages
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: runner.os == 'Windows'
         with:
           if-no-files-found: warn
