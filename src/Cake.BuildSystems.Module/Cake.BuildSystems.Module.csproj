@@ -43,6 +43,9 @@
         <ProjectReference Include="..\Cake.TravisCI.Module\Cake.TravisCI.Module.csproj">
             <PrivateAssets>all</PrivateAssets>
         </ProjectReference>
+        <ProjectReference Include="..\Cake.GitHubActions.Module\Cake.GitHubActions.Module.csproj">
+          <PrivateAssets>all</PrivateAssets>
+        </ProjectReference>
     </ItemGroup>
 
     <ItemGroup>
