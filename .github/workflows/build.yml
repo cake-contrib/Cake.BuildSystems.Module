@@ -49,18 +49,18 @@ jobs:
       - name: Fetch all tags and branches
         run: git fetch --prune --unshallow
 
-      - uses: actions/setup-dotnet@v3.0.3
+      - uses: actions/setup-dotnet@v3.1.0
         with:
           # codecov and unittests need 2.1
           dotnet-version: '2.1.818'
-      - uses: actions/setup-dotnet@v3.0.3
+      - uses: actions/setup-dotnet@v3.1.0
         with:
           dotnet-version: '3.1.414'
-      - uses: actions/setup-dotnet@v3.0.3
+      - uses: actions/setup-dotnet@v3.1.0
         with:
           # gitversion needs 5.0
           dotnet-version: '5.0.402'
-      - uses: actions/setup-dotnet@v3.0.3
+      - uses: actions/setup-dotnet@v3.1.0
         with:
           # need at least .NET 6 to build
           dotnet-version: '6.0.400'
