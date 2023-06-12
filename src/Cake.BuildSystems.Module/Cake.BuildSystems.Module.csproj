@@ -12,7 +12,7 @@
           auto-detection of ProjectType/Version will fail
         -->
         <CakeContribGuidelinesProjectType>module</CakeContribGuidelinesProjectType>
-        <CakeContribGuidelinesOverrideTargetFrameworkCakeVersion>2.0.0</CakeContribGuidelinesOverrideTargetFrameworkCakeVersion>
+        <CakeContribGuidelinesOverrideTargetFrameworkCakeVersion>3.0.0</CakeContribGuidelinesOverrideTargetFrameworkCakeVersion>
     </PropertyGroup>
 
     <PropertyGroup>
