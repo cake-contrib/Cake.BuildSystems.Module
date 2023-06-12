@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cake.Core;
@@ -27,16 +27,6 @@ namespace Cake.Module.Shared
             _engine = implementation;
         }
 
-#pragma warning disable CS0618
-        /// <inheritdoc cref="ICakeEngine.Setup"/>
-        [Obsolete]
-        public event EventHandler<SetupEventArgs> Setup
-        {
-            add { _engine.Setup += value; }
-            remove { _engine.Setup -= value; }
-        }
-#pragma warning restore CS0618
-
         /// <inheritdoc cref="ICakeEngine.BeforeSetup"/>
         public event EventHandler<BeforeSetupEventArgs> BeforeSetup
         {
@@ -50,16 +40,6 @@ namespace Cake.Module.Shared
             add { _engine.AfterSetup += value; }
             remove { _engine.AfterSetup -= value; }
         }
-
-#pragma warning disable CS0618
-        /// <inheritdoc cref="ICakeEngine.Teardown"/>
-        [Obsolete]
-        public event EventHandler<TeardownEventArgs> Teardown
-        {
-            add { _engine.Teardown += value; }
-            remove { _engine.Teardown -= value; }
-        }
-#pragma warning restore CS0618
 
         /// <inheritdoc cref="ICakeEngine.BeforeTeardown"/>
         public event EventHandler<BeforeTeardownEventArgs> BeforeTeardown
@@ -75,16 +55,6 @@ namespace Cake.Module.Shared
             remove { _engine.AfterTeardown -= value; }
         }
 
-#pragma warning disable CS0618
-        /// <inheritdoc cref="ICakeEngine.TaskSetup"/>
-        [Obsolete]
-        public event EventHandler<TaskSetupEventArgs> TaskSetup
-        {
-            add { _engine.TaskSetup += value; }
-            remove { _engine.TaskSetup -= value; }
-        }
-#pragma warning restore CS0618
-
         /// <inheritdoc cref="ICakeEngine.BeforeTaskSetup"/>
         public event EventHandler<BeforeTaskSetupEventArgs> BeforeTaskSetup
         {
@@ -98,16 +68,6 @@ namespace Cake.Module.Shared
             add { _engine.AfterTaskSetup += value; }
             remove { _engine.AfterTaskSetup -= value; }
         }
-
-#pragma warning disable CS0618
-        /// <inheritdoc cref="ICakeEngine.TaskTeardown"/>
-        [Obsolete]
-        public event EventHandler<TaskTeardownEventArgs> TaskTeardown
-        {
-            add { _engine.TaskTeardown += value; }
-            remove { _engine.TaskTeardown -= value; }
-        }
-#pragma warning restore CS0618
 
         /// <inheritdoc cref="ICakeEngine.BeforeTaskTeardown"/>
         public event EventHandler<BeforeTaskTeardownEventArgs> BeforeTaskTeardown
