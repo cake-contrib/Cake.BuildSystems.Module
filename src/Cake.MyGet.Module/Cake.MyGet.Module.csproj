@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -14,7 +14,7 @@
   <ItemGroup>
     <PackageReference Include="Cake.Core" Version="2.0.0" PrivateAssets="All" />
     <PackageReference Include="Cake.Common" Version="2.0.0" PrivateAssets="All" />
-    <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" PrivateAssets="All" />
+    <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
