@@ -39,6 +39,24 @@ namespace Cake.Module.Shared
         /// <inheritdoc />
         public abstract void Write(CakeReport report);
 
+        /// <inheritdoc/>
+        public virtual void WriteLifeCycleStep(string name, Verbosity verbosity)
+        {
+            new CakeReportPrinter(_console, _context).WriteLifeCycleStep(name, verbosity);
+        }
+
+        /// <inheritdoc/>
+        public virtual void WriteStep(string name, Verbosity verbosity)
+        {
+            new CakeReportPrinter(_console, _context).WriteLifeCycleStep(name, verbosity);
+        }
+
+        /// <inheritdoc/>
+        public virtual void WriteSkippedStep(string name, Verbosity verbosity)
+        {
+            new CakeReportPrinter(_console, _context).WriteLifeCycleStep(name, verbosity);
+        }
+
         /// <summary>
         /// Writes the report to the <see cref="IConsole"/>.
         /// </summary>
