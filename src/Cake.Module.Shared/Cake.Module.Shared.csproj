@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Cake.Core" Version="3.0.0" PrivateAssets="All" />
     <PackageReference Include="Cake.Common" Version="3.0.0" PrivateAssets="All" />
-    <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" PrivateAssets="All" />
+    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
