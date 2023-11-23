@@ -20,26 +20,19 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - uses: actions/setup-dotnet@v3.2.0
       with:
-        # codecov and unittests need 2.1
-        dotnet-version: '2.1.818'
-    - uses: actions/setup-dotnet@v3.2.0
-      with:
-        dotnet-version: '3.1.414'
-    - uses: actions/setup-dotnet@v3.2.0
-      with:
-        # gitversion needs 5.0
-        dotnet-version: '5.0.402'
-    - uses: actions/setup-dotnet@v3.2.0
-      with:
-        # need at least .NET 6 to build
-        dotnet-version: '6.0.400'
-        include-prerelease: true
+        dotnet-version: |
+          2.1
+          3.1
+          5.0
+          6.0
+          7.0
+          8.0
 
     - name: Cache Tools
       uses: actions/cache@v3
