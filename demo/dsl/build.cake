@@ -1,4 +1,4 @@
-#module nuget:?package=Cake.BuildSystems.Module&version=3.1.0
+#module nuget://?package=Cake.Buildsystems.Module&prerelease
 
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
