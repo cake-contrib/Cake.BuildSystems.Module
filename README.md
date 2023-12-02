@@ -39,6 +39,10 @@ Currently this module supports:
 
 - Log folding for the Cake build and for individual tasks
 
+### GitLab CI
+
+- Add colored output for Cake log messages in the GitLab pipeline output window
+
 ## Usage
 
 Each build system's functionality resides in its own module, with `Cake.Module.Shared` used for shared types. Each module will conditionally register itself, meaning they will only be loaded in their respective CI environments. This means all modules can be deployed with a single codebase without interference.
@@ -81,6 +85,7 @@ public static int Main(string[] args)
         .UseModule<MyGetModule>()
         .UseModule<TravisCIModule>()
         .UseModule<TeamCityModule>()
+        .UseModule<GitLabCIModule>()
         // continue with the "normal" setup of the CakeHost
         .UseContext<BuildContext>()
         .Run(args);
