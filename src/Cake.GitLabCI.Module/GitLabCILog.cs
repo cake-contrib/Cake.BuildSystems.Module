@@ -70,13 +70,16 @@ namespace Cake.AzurePipelines.Module
                 message = $"{level}: {string.Format(format, args)}";
             }
 
+            // Passing a string to IConsole.WriteLine() / IConsole.WriteErrorLine() will cause that string to be interpreted as format string.
+            // This will cause an error if the string contains curly braces and WriteLine() will faile with a FormatException.
+            // To avoid this, pass in the "no-op" format string and pass the text to write to the console as argument that will be formatted into the format string
             if (level > LogLevel.Error)
             {
-                _console.WriteLine(message);
+                _console.WriteLine("{0}", message);
             }
             else
             {
-                _console.WriteErrorLine(message);
+                _console.WriteErrorLine("{0}", message);
             }
         }
     }
