@@ -6,7 +6,7 @@ using Cake.Core.Diagnostics;
 
 using JetBrains.Annotations;
 
-namespace Cake.AzurePipelines.Module
+namespace Cake.GitLabCI.Module
 {
     /// <summary>
     /// <see cref="ICakeLog"/> implementation for GitLab CI.

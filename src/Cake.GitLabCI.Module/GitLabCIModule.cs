@@ -4,9 +4,9 @@ using Cake.Core.Annotations;
 using Cake.Core.Composition;
 using Cake.Core.Diagnostics;
 
-[assembly: CakeModule(typeof(Cake.AzurePipelines.Module.GitLabCIModule))]
+[assembly: CakeModule(typeof(Cake.GitLabCI.Module.GitLabCIModule))]
 
-namespace Cake.AzurePipelines.Module
+namespace Cake.GitLabCI.Module
 {
     /// <summary>
     /// <see cref="ICakeModule"/> implementation for GitLab CI.
