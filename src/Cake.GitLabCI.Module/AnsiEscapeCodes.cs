@@ -1,4 +1,4 @@
-namespace Cake.AzurePipelines.Module
+namespace Cake.GitLabCI.Module
 {
     internal static class AnsiEscapeCodes
     {
