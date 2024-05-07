@@ -14,6 +14,7 @@ BuildParameters.SetParameters(
   shouldUseDeterministicBuilds: true,
   gitterMessage: "@/all " + standardNotificationMessage,
   twitterMessage: standardNotificationMessage,
+  shouldRunCodecov: false,
   preferredBuildProviderType: BuildProviderType.GitHubActions,
   preferredBuildAgentOperatingSystem: PlatformFamily.Linux);
 
