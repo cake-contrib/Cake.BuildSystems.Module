@@ -75,7 +75,7 @@ namespace Cake.GitLabCI.Module
 
         private void WriteSectionStart(string sectionName, string sectionHeader = null)
         {
-            _console.WriteLine("{0}", $"{AnsiEscapeCodes.SectionMarker}section_start:{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}:{sectionName}\r{AnsiEscapeCodes.SectionMarker}{sectionHeader ?? sectionName}");
+            _console.WriteLine("{0}", $"{AnsiEscapeCodes.SectionMarker}section_start:{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}:{sectionName}\r{AnsiEscapeCodes.SectionMarker}{AnsiEscapeCodes.ForegroundBlue}{sectionHeader ?? sectionName}{AnsiEscapeCodes.Reset}");
         }
 
         private void WriteSectionEnd(string sectionName)
