@@ -45,17 +45,17 @@ namespace Cake.GitLabCI.Module
 
         private void OnBeforeSetup(object sender, BeforeSetupEventArgs e)
         {
-            WriteSectionStart("Setup");
+            WriteSectionStart("setup", "Executing Setup");
         }
 
         private void OnAfterSetup(object sender, AfterSetupEventArgs e)
         {
-            WriteSectionEnd("Setup");
+            WriteSectionEnd("setup");
         }
 
         private void OnBeforeTaskSetup(object sender, BeforeTaskSetupEventArgs e)
         {
-            WriteSectionStart(GetSectionNameForTask(e.TaskSetupContext.Task.Name), e.TaskSetupContext.Task.Name);
+            WriteSectionStart(GetSectionNameForTask(e.TaskSetupContext.Task.Name), $"Executing task \"{e.TaskSetupContext.Task.Name}\"");
         }
 
         private void OnAfterTaskTeardown(object sender, AfterTaskTeardownEventArgs e)
@@ -65,17 +65,17 @@ namespace Cake.GitLabCI.Module
 
         private void OnBeforeTeardown(object sender, BeforeTeardownEventArgs e)
         {
-            WriteSectionStart("Teardown");
+            WriteSectionStart("teardown", "Executing Teardown");
         }
 
         private void OnAfterTeardown(object sender, AfterTeardownEventArgs e)
         {
-            WriteSectionEnd("Teardown");
+            WriteSectionEnd("teardown");
         }
 
-        private void WriteSectionStart(string sectionName, string sectionHeader = null)
+        private void WriteSectionStart(string sectionName, string sectionHeader)
         {
-            _console.WriteLine("{0}", $"{AnsiEscapeCodes.SectionMarker}section_start:{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}:{sectionName}\r{AnsiEscapeCodes.SectionMarker}{AnsiEscapeCodes.ForegroundBlue}{sectionHeader ?? sectionName}{AnsiEscapeCodes.Reset}");
+            _console.WriteLine("{0}", $"{AnsiEscapeCodes.SectionMarker}section_start:{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}:{sectionName}\r{AnsiEscapeCodes.SectionMarker}{AnsiEscapeCodes.ForegroundBlue}{sectionHeader}{AnsiEscapeCodes.Reset}");
         }
 
         private void WriteSectionEnd(string sectionName)
