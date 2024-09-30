@@ -20,6 +20,9 @@ BuildParameters.SetParameters(
 
 BuildParameters.PrintParameters(Context);
 
+ToolSettings.SetToolPreprocessorDirectives(
+                            gitReleaseManagerGlobalTool: "#tool dotnet:?package=GitReleaseManager.Tool&version=0.18.0");
+
 ToolSettings.SetToolSettings(context: Context);
 
 Build.RunDotNetCore();
