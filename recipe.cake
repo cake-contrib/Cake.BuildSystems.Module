@@ -14,10 +14,14 @@ BuildParameters.SetParameters(
   shouldUseDeterministicBuilds: true,
   gitterMessage: "@/all " + standardNotificationMessage,
   twitterMessage: standardNotificationMessage,
+  shouldRunCodecov: false,
   preferredBuildProviderType: BuildProviderType.GitHubActions,
   preferredBuildAgentOperatingSystem: PlatformFamily.Linux);
 
 BuildParameters.PrintParameters(Context);
+
+ToolSettings.SetToolPreprocessorDirectives(
+                            gitReleaseManagerGlobalTool: "#tool dotnet:?package=GitReleaseManager.Tool&version=0.18.0");
 
 ToolSettings.SetToolSettings(context: Context);
 
