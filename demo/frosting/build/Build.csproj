@@ -6,7 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
-    <PackageReference Include="Cake.Frosting" Version="4.0.0" />
+    <PackageReference Include="Cake.Frosting" Version="5.0.0" />
     <ProjectReference Include="$(ProjectDir)../../../src/Cake.AzurePipelines.Module/Cake.AzurePipelines.Module.csproj" />
     <ProjectReference Include="$(ProjectDir)../../../src/Cake.GitHubActions.Module/Cake.GitHubActions.Module.csproj" />
     <ProjectReference Include="$(ProjectDir)../../../src/Cake.MyGet.Module/Cake.MyGet.Module.csproj" />
