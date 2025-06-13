@@ -19,7 +19,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [windows-2022, ubuntu-24.04]
 
     env:
       AZURE_PASSWORD: ${{ secrets.AZURE_PASSWORD }}
@@ -57,8 +57,7 @@ jobs:
             3.1
             5.0
             6.0
-            7.0
-            8.0
+            9.0
 
       - name: Cache Tools
         uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4
@@ -67,12 +66,12 @@ jobs:
           key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake') }}
 
       - name: Build project
-        uses: cake-build/cake-action@1223b6fa067ad192159f43b50cd4f953679b0934 # v2.0.0
+        uses: cake-build/cake-action@5167c3f6a9e15c76f009de2acdfb9488552bc0b9 # v3
         with:
           script-path: recipe.cake
           target: CI
           verbosity: Diagnostic
-          cake-version: 1.3.0
+          cake-version: tool-manifest
 
       # currently, Cake.Recipe does not upload artifacts when run on gh-actions
       - name: Upload Issues
