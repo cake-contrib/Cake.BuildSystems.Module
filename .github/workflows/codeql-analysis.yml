@@ -33,6 +33,7 @@ jobs:
           6.0
           7.0
           8.0
+          9.0
 
     - name: Cache Tools
       uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4
@@ -46,11 +47,11 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Build project
-      uses: cake-build/cake-action@1223b6fa067ad192159f43b50cd4f953679b0934 # v2.0.0
+      uses: cake-build/cake-action@5167c3f6a9e15c76f009de2acdfb9488552bc0b9 # v3
       with:
         script-path: recipe.cake
         target: DotNetCore-Build
-        cake-version: 1.3.0
+        cake-version: tool-manifest
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@48ab28a6f5dbc2a99bf1e0131198dd8f1df78169 # v3

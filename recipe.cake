@@ -16,12 +16,16 @@ BuildParameters.SetParameters(
   twitterMessage: standardNotificationMessage,
   shouldRunCodecov: false,
   preferredBuildProviderType: BuildProviderType.GitHubActions,
-  preferredBuildAgentOperatingSystem: PlatformFamily.Linux);
+  preferredBuildAgentOperatingSystem: PlatformFamily.Linux,
+  shouldUseTargetFrameworkPath: false);
 
 BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolPreprocessorDirectives(
-                            gitReleaseManagerGlobalTool: "#tool dotnet:?package=GitReleaseManager.Tool&version=0.18.0");
+    gitReleaseManagerGlobalTool: "#tool dotnet:?package=GitReleaseManager.Tool&version=0.18.0",
+    gitVersionGlobalTool: "#tool dotnet:?package=GitVersion.Tool&version=5.12.0",
+    reportGeneratorGlobalTool: "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=5.4.7",
+    coverallsGlobalTool: "#tool dotnet:?package=coveralls.net&version=4.0.1");
 
 ToolSettings.SetToolSettings(context: Context);
 
