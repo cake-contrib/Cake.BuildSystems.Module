@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <IsPackable>true</IsPackable>
         <IncludeSymbols>true</IncludeSymbols>
@@ -12,7 +12,7 @@
           auto-detection of ProjectType/Version will fail
         -->
         <CakeContribGuidelinesProjectType>module</CakeContribGuidelinesProjectType>
-        <CakeContribGuidelinesOverrideTargetFrameworkCakeVersion>3.0.0</CakeContribGuidelinesOverrideTargetFrameworkCakeVersion>
+        <CakeContribGuidelinesOverrideTargetFrameworkCakeVersion>5.0.0</CakeContribGuidelinesOverrideTargetFrameworkCakeVersion>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -48,7 +48,7 @@
         </ProjectReference>
         <ProjectReference Include="..\Cake.GitLabCI.Module\Cake.GitLabCI.Module.csproj">
           <PrivateAssets>all</PrivateAssets>
-        </ProjectReference>      
+        </ProjectReference>
     </ItemGroup>
 
     <ItemGroup>
