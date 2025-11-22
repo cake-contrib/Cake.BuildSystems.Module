@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Cake.Common.Build;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Module.Shared;
 using JetBrains.Annotations;
@@ -53,6 +55,8 @@ namespace Cake.AzurePipelines.Module
 
         private void WriteToMarkdown(CakeReport report)
         {
+            var includeSkippedReasonColumn = report.Any(r => !string.IsNullOrEmpty(r.SkippedMessage));
+
             var maxTaskNameLength = 29;
             foreach (var item in report)
             {
@@ -67,13 +71,30 @@ namespace Cake.AzurePipelines.Module
 
             var sb = new StringBuilder();
             sb.AppendLine("");
-            sb.AppendLine("|Task|Duration|");
-            sb.AppendLine("|:---|-------:|");
+
+            if (includeSkippedReasonColumn)
+            {
+                sb.AppendLine("|Task|Duration|Status|Skip Reason|");
+                sb.AppendLine("|:---|-------:|:-----|:----------|");
+            }
+            else
+            {
+                sb.AppendLine("|Task|Duration|Status|");
+                sb.AppendLine("|:---|-------:|:-----|");
+            }
+
             foreach (var item in report)
             {
                 if (ShouldWriteTask(item))
                 {
-                    sb.AppendLine(string.Format(lineFormat, item.TaskName, FormatDuration(item)));
+                    if (includeSkippedReasonColumn)
+                    {
+                        sb.AppendLine(string.Format(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus.ToReportStatus(), item.SkippedMessage));
+                    }
+                    else
+                    {
+                        sb.AppendLine(string.Format(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus.ToReportStatus()));
+                    }
                 }
             }
 
