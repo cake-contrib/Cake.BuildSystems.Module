@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cake.Core" Version="5.0.0" PrivateAssets="All" />
-    <PackageReference Include="Cake.Common" Version="5.0.0" PrivateAssets="All" />
+    <PackageReference Include="Cake.Core" Version="6.0.0" PrivateAssets="All" />
+    <PackageReference Include="Cake.Common" Version="6.0.0" PrivateAssets="All" />
     <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

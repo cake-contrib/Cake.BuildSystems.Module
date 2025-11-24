@@ -63,6 +63,8 @@ namespace Cake.Module.Shared
         /// <param name="report">The report to write.</param>
         protected void WriteToConsole(CakeReport report)
         {
+            var includeSkippedReasonColumn = report.Any(r => !string.IsNullOrEmpty(r.SkippedMessage));
+
             var maxTaskNameLength = 29;
             foreach (var item in report)
             {
@@ -78,7 +80,14 @@ namespace Cake.Module.Shared
 
             // Write header.
             _console.WriteLine();
-            _console.WriteLine(lineFormat, "Task", "Duration");
+            if (includeSkippedReasonColumn)
+            {
+                _console.WriteLine(lineFormat, "Task", "Duration", "Status", "Skip Reason");
+            }
+            else
+            {
+                _console.WriteLine(lineFormat, "Task", "Duration", "Status");
+            }
             _console.WriteLine(new string('-', 20 + maxTaskNameLength));
 
             // Write task status.
@@ -87,7 +96,14 @@ namespace Cake.Module.Shared
                 if (ShouldWriteTask(item))
                 {
                     _console.ForegroundColor = GetItemForegroundColor(item);
-                    _console.WriteLine(lineFormat, item.TaskName, FormatDuration(item));
+                    if (includeSkippedReasonColumn)
+                    {
+                        _console.WriteLine(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus.ToReportStatus(), item.SkippedMessage);
+                    }
+                    else
+                    {
+                        _console.WriteLine(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus.ToReportStatus());
+                    }
                 }
             }
 
@@ -142,7 +158,7 @@ namespace Cake.Module.Shared
         {
             if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
             {
-                return "Skipped";
+                return "-";
             }
 
             return FormatTime(item.Duration);

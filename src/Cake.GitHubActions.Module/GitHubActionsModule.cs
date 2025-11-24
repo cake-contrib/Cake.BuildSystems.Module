@@ -1,4 +1,4 @@
-﻿using Cake.Core;
+using Cake.Core;
 using Cake.Core.Annotations;
 using Cake.Core.Composition;
 using Cake.Core.Diagnostics;
@@ -22,6 +22,7 @@ namespace Cake.GitHubActions.Module
 
             registrar.RegisterType<GitHubActionsEngine>().As<ICakeEngine>().Singleton();
             registrar.RegisterType<GitHubActionsLog>().As<ICakeLog>().Singleton();
+            registrar.RegisterType<GitHubActionsReportPrinter>().As<ICakeReportPrinter>().Singleton();
         }
     }
 }
