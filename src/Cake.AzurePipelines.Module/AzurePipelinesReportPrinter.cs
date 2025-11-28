@@ -83,6 +83,7 @@ namespace Cake.AzurePipelines.Module
                 sb.AppendLine("|:---|-------:|:-----|");
             }
 
+            var targetName = string.Empty;
             foreach (var item in report)
             {
                 if (ShouldWriteTask(item))
@@ -96,9 +97,11 @@ namespace Cake.AzurePipelines.Module
                         sb.AppendLine(string.Format(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus.ToReportStatus()));
                     }
                 }
+
+                targetName = item.TaskName; // Use the last task name it is the target name
             }
 
-            sb.AppendLine("");
+            sb.AppendLine(string.Empty);
             var b = _context.BuildSystem().AzurePipelines;
             FilePath agentWorkPath = b.Environment.Build.ArtifactStagingDirectory + "/tasksummary.md";
             var absFilePath = agentWorkPath.MakeAbsolute(_context.Environment);
@@ -108,7 +111,7 @@ namespace Cake.AzurePipelines.Module
                 writer.Write(sb.ToString());
             }
 
-            _console.WriteLine($"##vso[task.addattachment type=Distributedtask.Core.Summary;name=Cake Build Summary;]{absFilePath.MakeAbsolute(_context.Environment).FullPath}");
+            _console.WriteLine($"##vso[task.addattachment type=Distributedtask.Core.Summary;name=Cake {targetName} Build Summary;]{absFilePath.MakeAbsolute(_context.Environment).FullPath}");
         }
     }
 }
