@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Cake.Common.Build;
 using Cake.Core;
+using Cake.Core.Diagnostics;
 using Cake.Core.IO;
 using Cake.Module.Shared;
 using JetBrains.Annotations;
@@ -53,6 +55,8 @@ namespace Cake.AzurePipelines.Module
 
         private void WriteToMarkdown(CakeReport report)
         {
+            var includeSkippedReasonColumn = report.Any(r => !string.IsNullOrEmpty(r.SkippedMessage));
+
             var maxTaskNameLength = 29;
             foreach (var item in report)
             {
@@ -67,17 +71,37 @@ namespace Cake.AzurePipelines.Module
 
             var sb = new StringBuilder();
             sb.AppendLine("");
-            sb.AppendLine("|Task|Duration|");
-            sb.AppendLine("|:---|-------:|");
+
+            if (includeSkippedReasonColumn)
+            {
+                sb.AppendLine("|Task|Duration|Status|Skip Reason|");
+                sb.AppendLine("|:---|-------:|:-----|:----------|");
+            }
+            else
+            {
+                sb.AppendLine("|Task|Duration|Status|");
+                sb.AppendLine("|:---|-------:|:-----|");
+            }
+
+            var targetName = string.Empty;
             foreach (var item in report)
             {
                 if (ShouldWriteTask(item))
                 {
-                    sb.AppendLine(string.Format(lineFormat, item.TaskName, FormatDuration(item)));
+                    if (includeSkippedReasonColumn)
+                    {
+                        sb.AppendLine(string.Format(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus.ToReportStatus(), item.SkippedMessage));
+                    }
+                    else
+                    {
+                        sb.AppendLine(string.Format(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus.ToReportStatus()));
+                    }
                 }
+
+                targetName = item.TaskName; // Use the last task name it is the target name
             }
 
-            sb.AppendLine("");
+            sb.AppendLine(string.Empty);
             var b = _context.BuildSystem().AzurePipelines;
             FilePath agentWorkPath = b.Environment.Build.ArtifactStagingDirectory + "/tasksummary.md";
             var absFilePath = agentWorkPath.MakeAbsolute(_context.Environment);
@@ -87,7 +111,7 @@ namespace Cake.AzurePipelines.Module
                 writer.Write(sb.ToString());
             }
 
-            _console.WriteLine($"##vso[task.addattachment type=Distributedtask.Core.Summary;name=Cake Build Summary;]{absFilePath.MakeAbsolute(_context.Environment).FullPath}");
+            _console.WriteLine($"##vso[task.addattachment type=Distributedtask.Core.Summary;name=Cake {targetName} Build Summary;]{absFilePath.MakeAbsolute(_context.Environment).FullPath}");
         }
     }
 }

@@ -11,7 +11,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
@@ -20,11 +20,11 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
       with:
         fetch-depth: 0
 
-    - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
+    - uses: actions/setup-dotnet@2016bd2012dba4e32de620c46fe006a3ac9f0602 # v5.0.1
       with:
         dotnet-version: |
           2.1
@@ -35,23 +35,35 @@ jobs:
           8.0
           9.0
 
+    - name: Install mono
+      if: runner.os == 'Linux'
+      # check https://www.mono-project.com/download/stable/#download-lin
+      run: |
+        sudo apt install ca-certificates gnupg
+        sudo gpg --homedir /tmp --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+        sudo chmod +r /usr/share/keyrings/mono-official-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+        sudo apt update
+        sudo apt install -y mono-complete
+        mono --version
+
     - name: Cache Tools
-      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
       with:
         path: tools
         key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake') }}
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+      uses: github/codeql-action/init@fdbfb4d2750291e159f0156def62b853c2798ca2 # v4
       with:
         languages: ${{ matrix.language }}
 
     - name: Build project
-      uses: cake-build/cake-action@5167c3f6a9e15c76f009de2acdfb9488552bc0b9 # v3
+      uses: cake-build/cake-action@d218f1133bb74a1df0b08c89cfd8fc100c09e1a0 # v3
       with:
         script-path: recipe.cake
         target: DotNetCore-Build
         cake-version: tool-manifest
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+      uses: github/codeql-action/analyze@fdbfb4d2750291e159f0156def62b853c2798ca2 # v4
