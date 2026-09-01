@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Cake.Core;
 using Cake.Core.Diagnostics;
+using Cake.Module.Shared;
 
 using JetBrains.Annotations;
 
