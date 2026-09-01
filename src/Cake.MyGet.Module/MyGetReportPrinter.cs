@@ -50,30 +50,33 @@ namespace Cake.MyGet.Module
             }
         }
 
-        private static string Escape(string text)
-        {
-            return text.Replace("|", "||")
-                .Replace("'", "|'")
-                .Replace("\n", "|n")
-                .Replace("\r", "|r")
-                .Replace("[", "|[")
-                .Replace("]", "|]");
-        }
-
         private void WriteToBuildLog(CakeReport report)
         {
-            RenderTextReport(report, (entry, text) =>
+            var b = _context.MyGet();
+
+            var maxTaskNameLength = 29;
+            foreach (var item in report)
             {
-                // MyGet has no colors in its build log, but it does highlight messages by status, which is
-                // the closest equivalent for calling out a task that failed.
-                var status = entry?.ExecutionStatus == CakeTaskExecutionStatus.Failed ? "ERROR" : "NORMAL";
-                _log.Write(
-                    Verbosity.Quiet,
-                    LogLevel.Information,
-                    "##myget[message text='{0}' status='{1}']",
-                    Escape(text),
-                    status);
-            });
+                if (item.TaskName.Length > maxTaskNameLength)
+                {
+                    maxTaskNameLength = item.TaskName.Length;
+                }
+            }
+
+            maxTaskNameLength++;
+            string lineFormat = "{0,-" + maxTaskNameLength + "}{1,-20}";
+
+            foreach (var entry in report)
+            {
+                if (ShouldWriteTask(entry))
+                {
+                    _log.Write(Verbosity.Quiet, LogLevel.Information,
+                            "##myget[message text='{0}' status='NORMAL']", string.Format(lineFormat, entry.TaskName, FormatDuration(entry)));
+                }
+            }
+
+            // Write footer.
+            _console.WriteLine(lineFormat, "Total:", FormatTime(GetTotalTime(report)));
         }
     }
 }

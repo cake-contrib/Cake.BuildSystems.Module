@@ -18,13 +18,6 @@ Currently this module supports:
 - Includes a Cake Build Summary widget on the build summary page, with an emoji per task status
 - Colour codes the build summary table in the build log, the way a regular terminal does
 
-### GitHub Actions
-
-- Individual log groups for each executed task
-- Integrates `Warning` and `Error` logging aliases with the workflow annotations
-- Adds the build summary table to the job summary, with an emoji per task status
-- Colour codes the build summary table in the workflow log, the way a regular terminal does
-
 ### TeamCity
 
 > Tested with TeamCity 10
@@ -38,7 +31,7 @@ Currently this module supports:
 > Supports the MyGet Build Service
 
 - Task records are added to build logs
-- Includes a task summary table in the build log, and reports failed tasks as errors
+- Includes a task summary in the build log
 - Integrates `Warning`, `Error` and `Fatal` logging aliases with the build log and report 
 
 ### Travis CI
@@ -90,7 +83,6 @@ public static int Main(string[] args)
     return new CakeHost()
         // Register all modules from Cake.Buildsystems.Module
         .UseModule<AzurePipelinesModule>()
-        .UseModule<GitHubActionsModule>()
         .UseModule<MyGetModule>()
         .UseModule<TravisCIModule>()
         .UseModule<TeamCityModule>()
