@@ -17,6 +17,7 @@ Currently this module supports:
 - Integrates `Warning` and `Error` logging aliases with the Build Issues summary
 - Includes a Cake Build Summary widget on the build summary page, with an emoji per task status
 - Colour codes the build summary table in the build log, the way a regular terminal does
+- Reports task durations as `0:25` or `< 1sec` rather than `00:00:25.1234567`
 
 ### TeamCity
 
