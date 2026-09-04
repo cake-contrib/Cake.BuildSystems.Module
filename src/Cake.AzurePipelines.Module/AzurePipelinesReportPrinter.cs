@@ -24,7 +24,6 @@ namespace Cake.AzurePipelines.Module
         private static readonly string DurationColumnHeader = "Duration";
         private static readonly string StatusColumnHeader = "Status";
         private static readonly string SkipReasonColumnHeader = "Skip Reason";
-        private static readonly string SubSecondDuration = "< 1sec";
         private static readonly int TaskColumnMinWidth = 29;
         private static readonly int ColumnGap = 2;
         private static readonly ConsoleColor TableColor = ConsoleColor.Green;
@@ -75,41 +74,6 @@ namespace Cake.AzurePipelines.Module
         private static int MaxLength(IEnumerable<string> values)
         {
             return values.Select(v => v?.Length ?? 0).DefaultIfEmpty(0).Max();
-        }
-
-        /// <summary>
-        /// Renders the duration of one <see cref="CakeReportEntry"/> the way a person reads a stopwatch.
-        /// </summary>
-        /// <param name="item">The <see cref="CakeReportEntry"/>.</param>
-        /// <returns>
-        /// An empty string for a task that never ran, otherwise the humanized duration.
-        /// </returns>
-        private static string HumanizeDuration(CakeReportEntry item)
-        {
-            return item.ExecutionStatus == CakeTaskExecutionStatus.Skipped
-                ? string.Empty
-                : HumanizeTime(item.Duration);
-        }
-
-        /// <summary>
-        /// Renders a <see cref="TimeSpan"/> as <c>m:ss</c>, or as <c>h:mm:ss</c> from an hour upwards.
-        /// </summary>
-        /// <param name="time">The <see cref="TimeSpan"/> to render.</param>
-        /// <returns>The humanized duration.</returns>
-        private static string HumanizeTime(TimeSpan time)
-        {
-            // A tenth of a second means nothing in a build summary, but the difference between "it ran
-            // instantly" and "it took a second" does, so anything below a second is called out as such.
-            if (time < TimeSpan.FromSeconds(1))
-            {
-                return SubSecondDuration;
-            }
-
-            var rounded = TimeSpan.FromSeconds(Math.Round(time.TotalSeconds, MidpointRounding.AwayFromZero));
-
-            return rounded < TimeSpan.FromHours(1)
-                ? string.Format(CultureInfo.InvariantCulture, "{0}:{1:00}", (long)rounded.TotalMinutes, rounded.Seconds)
-                : string.Format(CultureInfo.InvariantCulture, "{0}:{1:00}:{2:00}", (long)rounded.TotalHours, rounded.Minutes, rounded.Seconds);
         }
 
         private static ConsoleColor GetStatusColor(CakeReportEntry item)
@@ -175,14 +139,14 @@ namespace Cake.AzurePipelines.Module
         {
             var entries = report.Where(ShouldWriteTask).ToList();
             var includeSkipReasonColumn = entries.Any(e => !string.IsNullOrEmpty(e.SkippedMessage));
-            var totalDuration = HumanizeTime(GetTotalTime(report));
+            var totalDuration = FormatTime(GetTotalTime(report));
 
             // Durations are no longer a fixed 16 characters wide, so every column is sized to what it
             // actually holds. Otherwise a humanized duration would sit in a wide sea of padding.
             var taskColumnWidth = Math.Max(TaskColumnMinWidth, MaxLength(entries.Select(e => e.TaskName))) + ColumnGap;
             var durationColumnWidth = Math.Max(
                 DurationColumnHeader.Length,
-                MaxLength(entries.Select(HumanizeDuration).Concat(new[] { totalDuration })));
+                MaxLength(entries.Select(e => FormatDuration(e)).Concat(new[] { totalDuration })));
             var statusColumnWidth = Math.Max(
                 StatusColumnHeader.Length,
                 MaxLength(entries.Select(e => e.ExecutionStatus.ToReportStatus()))) + ColumnGap;
@@ -209,7 +173,7 @@ namespace Cake.AzurePipelines.Module
             // Write task status.
             foreach (var item in entries)
             {
-                WriteLine(GetStatusColor(item), FormatLine(lineFormat, item.TaskName, HumanizeDuration(item), item.ExecutionStatus.ToReportStatus(), item.SkippedMessage));
+                WriteLine(GetStatusColor(item), FormatLine(lineFormat, item.TaskName, FormatDuration(item), item.ExecutionStatus.ToReportStatus(), item.SkippedMessage));
             }
 
             // Write footer.
@@ -250,11 +214,11 @@ namespace Cake.AzurePipelines.Module
 
                 var status = GetStatusIcon(item) + " " + item.ExecutionStatus.ToReportStatus();
                 sb.AppendLine(includeSkipReasonColumn
-                    ? $"|{taskName}|{HumanizeDuration(item)}|{status}|{EscapeMarkdown(item.SkippedMessage)}|"
-                    : $"|{taskName}|{HumanizeDuration(item)}|{status}|");
+                    ? $"|{taskName}|{FormatDuration(item)}|{status}|{EscapeMarkdown(item.SkippedMessage)}|"
+                    : $"|{taskName}|{FormatDuration(item)}|{status}|");
             }
 
-            var total = $"|**Total:**|**{HumanizeTime(GetTotalTime(report))}**|";
+            var total = $"|**Total:**|**{FormatTime(GetTotalTime(report))}**|";
             sb.AppendLine(includeSkipReasonColumn ? total + "||" : total + "|");
             sb.AppendLine(string.Empty);
 

@@ -17,7 +17,6 @@ Currently this module supports:
 - Integrates `Warning` and `Error` logging aliases with the Build Issues summary
 - Includes a Cake Build Summary widget on the build summary page, with an emoji per task status
 - Colour codes the build summary table in the build log, the way a regular terminal does
-- Reports task durations as `0:25` or `< 1sec` rather than `00:00:25.1234567`
 
 ### TeamCity
 
@@ -48,6 +47,50 @@ Currently this module supports:
 ## Usage
 
 Each build system's functionality resides in its own module, with `Cake.Module.Shared` used for shared types. Each module will conditionally register itself, meaning they will only be loaded in their respective CI environments. This means all modules can be deployed with a single codebase without interference.
+
+## Configuration
+
+These modules read their settings from [Cake's configuration](https://cakebuild.net/docs/running-builds/configuration/), so each of the settings below can be given in three ways. The `BuildSystems_` prefix in the table is a section in the configuration file:
+
+```ini
+; cake.config
+[BuildSystems]
+HumanizedTimespans=true
+```
+
+As an environment variable, prefixed with `CAKE_`:
+
+```bash
+CAKE_BUILDSYSTEMS_HUMANIZEDTIMESPANS=true
+```
+
+Or as an argument to the build:
+
+```bash
+dotnet cake --buildsystems_humanizedtimespans=true
+```
+
+| Setting | Default | Description |
+|:--------|:--------|:------------|
+| `BuildSystems_HumanizedTimespans` | `false` | Report task durations the way a person reads a stopwatch instead of with full `TimeSpan` precision. See [Humanized timespans](#humanized-timespans). |
+| `BuildSystems_FailOnFatal` | `false` | MyGet only. Report a `Fatal` log message as a build problem rather than as a failed message. |
+
+### Humanized timespans
+
+Durations are reported with full `TimeSpan` precision by default, exactly as Cake itself reports them. Setting `BuildSystems_HumanizedTimespans` to `true` shortens them:
+
+```
+Task                           Duration  Status
+------------------------------------------------
+Compile                            2:01  Succeeded
+UpdateBuildInformation           < 1sec  Succeeded
+Publish                                  Skipped
+Total:                            20:39
+```
+
+Anything under a second becomes `< 1sec`, an hour or more gains an hours part as `1:02:03`, and a task that never ran shows no duration at all.
+
+This applies to every build summary these modules render themselves, so to Azure Pipelines, GitHub Actions and MyGet. TeamCity, Travis CI and GitLab CI register no report printer of their own - their summary is the one Cake prints - so the setting has no effect for them.
 
 ## Installation
 
