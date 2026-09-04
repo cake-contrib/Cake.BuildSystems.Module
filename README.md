@@ -81,14 +81,15 @@ Durations are reported with full `TimeSpan` precision by default, exactly as Cak
 
 ```
 Task                           Duration  Status
-------------------------------------------------
+----------------------------------------------------
 Compile                            2:01  Succeeded
-UpdateBuildInformation           < 1sec  Succeeded
+UpdateBuildInformation            < 1 s  Succeeded
 Publish                                  Skipped
+----------------------------------------------------
 Total:                            20:39
 ```
 
-Anything under a second becomes `< 1sec`, an hour or more gains an hours part as `1:02:03`, and a task that never ran shows no duration at all.
+Anything under a second becomes `< 1 s`, an hour or more gains an hours part as `1:02:03`, and a task that never ran shows no duration at all.
 
 This applies to every build summary these modules render themselves, so to Azure Pipelines, GitHub Actions and MyGet. TeamCity, Travis CI and GitLab CI register no report printer of their own - their summary is the one Cake prints - so the setting has no effect for them.
 

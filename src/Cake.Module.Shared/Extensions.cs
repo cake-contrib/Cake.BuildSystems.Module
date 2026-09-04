@@ -10,11 +10,11 @@ namespace Cake.Module.Shared
     /// </summary>
     public static class Extensions
     {
-        private static readonly string SubSecondDuration = "< 1sec";
+        private static readonly string SubSecondDuration = "< 1 s";
 
         /// <summary>
         /// Renders a <see cref="TimeSpan"/> the way a person reads a stopwatch, as <c>m:ss</c>, or as
-        /// <c>h:mm:ss</c> from an hour upwards. Anything below a second becomes <c>&lt; 1sec</c>.
+        /// <c>h:mm:ss</c> from an hour upwards. Anything below a second becomes <c>&lt; 1 s</c>.
         /// </summary>
         /// <param name="time">The <see cref="TimeSpan"/> to render.</param>
         /// <returns>The humanized duration.</returns>
