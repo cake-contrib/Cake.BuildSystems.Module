@@ -36,6 +36,23 @@ namespace Cake.Module.Shared
             _console = console;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether durations are rendered as humanized timespans.
+        /// </summary>
+        /// <remarks>
+        /// Controlled by the <c>BuildSystems_HumanizedTimespans</c> Cake configuration setting. It is off
+        /// by default, so a report keeps the full <see cref="TimeSpan"/> precision Cake itself uses unless
+        /// the setting is turned on.
+        /// </remarks>
+        protected bool UseHumanizedTimespans
+        {
+            get
+            {
+                var configuration = _context?.Configuration;
+                return configuration != null && configuration.GetConfigFlag("BuildSystems_HumanizedTimespans");
+            }
+        }
+
         /// <inheritdoc />
         public abstract void Write(CakeReport report);
 
@@ -129,13 +146,33 @@ namespace Cake.Module.Shared
         }
 
         /// <summary>
-        /// Formats a <see cref="TimeSpan"/>.
+        /// Formats a <see cref="TimeSpan"/>, honouring <see cref="UseHumanizedTimespans"/>.
         /// </summary>
         /// <param name="time">The <see cref="TimeSpan"/> to format.</param>
         /// <returns>A formatted string.</returns>
-        protected static string FormatTime(TimeSpan time)
+        protected string FormatTime(TimeSpan time)
         {
-            return time.ToString("c", CultureInfo.InvariantCulture);
+            return UseHumanizedTimespans
+                ? time.Humanize()
+                : time.ToString("c", CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Returns the formatted time it took to process one <see cref="CakeReportEntry"/>,
+        /// honouring <see cref="UseHumanizedTimespans"/>.
+        /// </summary>
+        /// <param name="item">The <see cref="CakeReportEntry"/>.</param>
+        /// <returns>The formatted time.</returns>
+        protected string FormatDuration(CakeReportEntry item)
+        {
+            if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
+            {
+                // A humanized report leaves the cell of a task that never ran empty. Full precision keeps
+                // Cake's dash, so that turning the setting off leaves the report exactly as it was.
+                return UseHumanizedTimespans ? string.Empty : "-";
+            }
+
+            return FormatTime(item.Duration);
         }
 
         /// <summary>
@@ -147,21 +184,6 @@ namespace Cake.Module.Shared
         {
             return entries.Select(i => i.Duration)
                 .Aggregate(TimeSpan.Zero, (t1, t2) => t1 + t2);
-        }
-
-        /// <summary>
-        /// Returns the formatted time it took to process one <see cref="CakeReportEntry"/>.
-        /// </summary>
-        /// <param name="item">The <see cref="CakeReportEntry"/>.</param>
-        /// <returns>The formatted time.</returns>
-        protected static string FormatDuration(CakeReportEntry item)
-        {
-            if (item.ExecutionStatus == CakeTaskExecutionStatus.Skipped)
-            {
-                return "-";
-            }
-
-            return FormatTime(item.Duration);
         }
 
         /// <summary>

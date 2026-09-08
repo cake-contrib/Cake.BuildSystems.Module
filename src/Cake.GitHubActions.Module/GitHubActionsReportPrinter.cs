@@ -102,12 +102,12 @@ namespace Cake.GitHubActions.Module
             if (includeSkippedReasonColumn)
             {
                 sb.AppendLine("|||||");
-                sb.AppendLine(string.Format("|**_{0}_**|**_{1}_**|||", "Total:", GetTotalTime(report)));
+                sb.AppendLine(string.Format("|**_{0}_**|**_{1}_**|||", "Total:", FormatTime(GetTotalTime(report))));
             }
             else
             {
                 sb.AppendLine("||||");
-                sb.AppendLine(string.Format("|**_{0}_**|**_{1}_**||", "Total:", GetTotalTime(report)));
+                sb.AppendLine(string.Format("|**_{0}_**|**_{1}_**||", "Total:", FormatTime(GetTotalTime(report))));
             }
 
             _context.GitHubActions().Commands.SetStepSummary(sb.ToString());
