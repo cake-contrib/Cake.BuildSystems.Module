@@ -52,7 +52,7 @@ jobs:
       # codecov and unittests need 2.1, gitversion needs 5.0
       # GitReleasemanager needs 7.0
       # builds run on 9.0
-      - uses: actions/setup-dotnet@2016bd2012dba4e32de620c46fe006a3ac9f0602 # v5.0.1
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           dotnet-version: |
             2.1
