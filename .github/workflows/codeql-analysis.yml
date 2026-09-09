@@ -54,7 +54,7 @@ jobs:
         key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake') }}
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@fdbfb4d2750291e159f0156def62b853c2798ca2 # v4
+      uses: github/codeql-action/init@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4
       with:
         languages: ${{ matrix.language }}
 
@@ -66,4 +66,4 @@ jobs:
         cake-version: tool-manifest
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@fdbfb4d2750291e159f0156def62b853c2798ca2 # v4
+      uses: github/codeql-action/analyze@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4
