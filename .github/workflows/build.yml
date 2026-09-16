@@ -19,7 +19,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2022, ubuntu-24.04, macos-13]
+        os: [windows-2022, ubuntu-24.04, macos-26]
 
     env:
       AZURE_PASSWORD: ${{ secrets.AZURE_PASSWORD }}
@@ -62,7 +62,7 @@ jobs:
             7.0
             9.0
             10.0
-      - name: Install mono
+      - name: Install mono on Linux
         if: runner.os == 'Linux'
         # check https://www.mono-project.com/download/stable/#download-lin
         run: |
@@ -73,6 +73,13 @@ jobs:
           sudo apt update
           sudo apt install -y mono-complete
           mono --version
+      - name: Insatall libgit on mac
+        if: runner.os == 'macos'
+        run: |
+          brew install libgit2
+          # add a link, so libgit2sharp finds it - not sure if this is a wise move, but it works, for now.
+          sudo mkdir -p /usr/local/lib
+          sudo ln -sf "$(brew --prefix libgit2)/lib/libgit2.dylib" /usr/local/lib/libgit2-6777db8.dylib
       - name: Cache Tools
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
