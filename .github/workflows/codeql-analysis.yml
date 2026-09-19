@@ -34,6 +34,7 @@ jobs:
           7.0
           8.0
           9.0
+          10.0
 
     - name: Install mono
       if: runner.os == 'Linux'
